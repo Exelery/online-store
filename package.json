@@ -10,7 +10,6 @@
         "serve": "webpack serve"
   },
   "browserslist": "> 0.25%, not dead",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Exelery/online-store.git"
