@@ -1,0 +1,35 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: lightblue;
+
+  .container {
+    margin: 0 auto;
+    height:100%;
+    max-width: 1300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    
+    
+    .container__purchases {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+}
+
+.main-page{
+  .main-page__filters{
+    width: 20vw;
+    background-color: blueviolet;
+  }
+}

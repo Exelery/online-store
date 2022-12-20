@@ -1,12 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
-  
+  <header class="header">
+    <section class="container">
+      <div class="container__name">Название</div>
+      <div class="container__purchases">
+        <div class="purchases__sum"> Сумма</div>
+        <div class="purchases__cart"> Лого Корзины</div>
+      </div>
+    </section>
+  </header>
+  <main class="content">
+    <section class="main-page">
+      <aside class="main-page__filters">
+        <button>Reset Filters</button>
+        <fieldset class="filters__category"> 
+          <legend>Category</legend>
+          <div>
+            <input type="checkbox" id="smartphones">
+            <label for="smartphones"> smartphones</label>
+          </div>
+          
+        </fieldset>
+      </aside>
+      <section class="main-page__content main-content">
+        <div class="main-content__sorting">
+
+        </div>
+        <div class="main-content__products products">
+          <div class="products__item">
+            testItem
+          </div>
+        </div>
+      </section>
+    </section>
+
+  </main>
+  <footer>RSSchool 2022</footer>
+
 </body>
+
 </html>
