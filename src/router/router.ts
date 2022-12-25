@@ -43,8 +43,25 @@ class Router {
   }
 
   listen() {
-    clearInterval(this.intervalControl);
-    this.intervalControl = setInterval(this.interval, 50);
+    window.addEventListener('popstate', (event) => {
+      this.changePage();
+    });
+  }
+
+  changePage() {
+    if (this.current === this.getFragment()) return;
+    this.current = this.getFragment();
+
+    this.routes.some((route) => {
+      const match = this.current.match(route.path);
+
+      if (match) {
+        match.shift();
+        //      route.cb.apply({}, match);
+        return match;
+      }
+      return false;
+    });
   }
 
   remove(path: string) {
@@ -79,21 +96,5 @@ class Router {
   flush() {
     this.routes = [];
     return this;
-  }
-
-  interval() {
-    if (this.current === this.getFragment()) return;
-    this.current = this.getFragment();
-
-    this.routes.some((route) => {
-      const match = this.current.match(route.path);
-
-      if (match) {
-        match.shift();
-        //      route.cb.apply({}, match);
-        return match;
-      }
-      return false;
-    });
   }
 }
