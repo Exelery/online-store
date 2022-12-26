@@ -1,7 +1,3 @@
-// npx ts-node src/loader/loader.ts
-
-import { IData } from './../utils/types';
-
 const pathApi = 'https://dummyjson.com/products?limit=40';
 
 export class ApiLoader {
@@ -17,6 +13,3 @@ export class ApiLoader {
   }
 }
 
-// обработка данных
-const loader = new ApiLoader(pathApi);
-// loader.api<IData>().then((response) => console.log(response));
