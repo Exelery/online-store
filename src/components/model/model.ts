@@ -3,11 +3,11 @@ import { IData, IProduct, SortParm } from '../../utils/types';
 
 export default class Model {
   private apiLoader: ApiLoader;
-  private productsAll: IProduct[];
+  productsAll: IProduct[];
   public shoppingCart: { id: number; count: number; price: number }[] | null;
   constructor() {
     this.apiLoader = new ApiLoader();
-    this.loadData();
+    // this.loadData();
     this.shoppingCart = this.getShoppingCart();
   }
 
