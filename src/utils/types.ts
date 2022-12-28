@@ -18,3 +18,10 @@ export interface IData {
   skip: number;
   limit: number;
 }
+
+export enum SortParm {
+  priceUp = 'price-up',
+  priceDown = 'price-down',
+  ratingUp = 'rating-up',
+  ratingDown = 'rating-down',
+}

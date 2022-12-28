@@ -1,11 +1,7 @@
-// npx ts-node src/loader/loader.ts
+const pathApi = 'https://dummyjson.com/products?limit=40';
 
-import { IData } from './../utils/types';
-
-const path = 'https://dummyjson.com/products?limit=40';
-
-class ApiLoader {
-  constructor(private path: string) {}
+export class ApiLoader {
+  constructor(private path: string = pathApi) {}
 
   public async api<T>(): Promise<T> {
     return fetch(this.path).then((response) => {
@@ -16,7 +12,3 @@ class ApiLoader {
     });
   }
 }
-
-// обработка данных
-const loader = new ApiLoader(path);
-loader.api<IData>().then((response) => console.log(response));
