@@ -25,7 +25,7 @@
 
 type IRouteCB = (arr: object | undefined, match: RegExpMatchArray | null | undefined) => void;
 
-class Router {
+export default class Router {
   routes: { path: string; cb: IRouteCB }[] = [];
   root = '/';
   current = '';
@@ -43,7 +43,8 @@ class Router {
   }
 
   listen() {
-    window.addEventListener('popstate', (event) => {
+    console.log('test');
+    window.addEventListener('popstate', () => {
       this.changePage();
     });
   }
