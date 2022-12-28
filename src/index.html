@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <!-- <link rel="stylesheet" href="css/style.css"> -->
 
 </head>
 
@@ -134,7 +134,7 @@
                 </div>
               </div>
             </div>
-            <ul class="products__items list">
+            <ul class="products__items tile">
               <li class="item tile">
                 <div class="item__image-container">
                   <img class="item__image"
@@ -145,7 +145,7 @@
                 <p class="item__price">$ 11.22</p>
                 <button class="item__add">Add to cart</button>
               </li>
-              <li class="item list">
+              <!-- <li class="item list">
                 <div class="item__image-container">
                   <img class="item__image"
                     src="https://www.zdnet.com/a/img/resize/8f70d8f49314057ba2d1b093f13b428052e47fc1/2022/09/08/4a731aca-0772-4f2b-aef7-d1e5f2ad72be/iphone-14-pro-in-purple.jpg?auto=webp&fit=crop&height=1200&width=1200"
@@ -163,7 +163,7 @@
                 </div>
                 <p class="item__price">$ 11.22</p>
                 <button class="item__add">Add to cart</button>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
@@ -176,7 +176,7 @@
     <div class="container">
       <div class="footer__inner">
         <a class="footer__link school" href="https://rs.school/js/" target="_blank"
-          style="background-image: url(img/rs_school_js.svg);"></a>
+          style="background-image: url(https://rs.school/images/rs_school_js.svg);"></a>
         <a class="footer__link author" href="https://github.com/Exelery" target="_blank">
           <svg class="footer__git" height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32"
             data-view-component="true" class="octicon octicon-mark-github v-align-middle">
@@ -197,18 +197,24 @@
       </div>
     </div>
   </footer>
-  
-  <template id="item_maket">
-    <li class="item tile">
+
+  <template id="itemTemp">
+    <li class="item">
       <div class="item__image-container">
-        <img class="item__image"
-          src="https://c.dns-shop.ru/thumb/st1/fit/760/600/8af06ee73fbf1b62d544d2c00eebb6f8/q93_f363c3fb621f5804a95001db775fc179578be2384aa8952f2d5ae34953498ae5.jpg"
-          alt="Product image">
+        <img class="item__image" src="" alt="Product image">
       </div>
-      <h2 class="item__name"></h2>
+      <div class="item__about">
+        <h2 class="item__name"></h2>
+        <div class="item__info">
+          <p class="item__category item__text">Category: <span></span></p>
+          <p class="item__brand item__text">Brand: <span></span></p>
+          <p class="item__discount item__text">Discount: <span></span></p>
+          <p class="item__rating item__text">Rating: <span></span></p>
+          <p class="item__stock item__text">Stock: <span></span></p>
+        </div>
+      </div>
       <p class="item__price"></p>
-      <button class="item__add"></button>
-      <button class="item__buy"></button>
+      <button class="item__add">Add to cart</button>
     </li>
   </template>
 
