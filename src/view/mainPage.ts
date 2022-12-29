@@ -1,11 +1,14 @@
 import { IProduct } from '../utils/types';
 import Item from './components/item';
+import Filters from './components/filters';
 
 export default class MainPage {
   item: Item;
+  filters: Filters;
 
   constructor() {
     this.item = new Item();
+    this.filters = new Filters();
   }
 
   addProductsSection() {
@@ -28,5 +31,7 @@ export default class MainPage {
   draw(data: IProduct[]) {
     this.addProductsSection();
     this.item.draw(data);
+    this.filters.drawCategoriesFilter(data);
+    this.filters.drawBrandsFilter(data);
   }
 }
