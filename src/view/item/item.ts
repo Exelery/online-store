@@ -11,6 +11,11 @@ export default class Item {
         const sourceClone: Node = itemTemp.content.cloneNode(true);
 
         if (sourceClone instanceof DocumentFragment) {
+          const itemLi: HTMLElement | null = sourceClone.querySelector('.item');
+          if (itemLi != null) {
+            itemLi.dataset.id = item.id.toString();
+          }
+
           const itemName: HTMLElement | null = sourceClone.querySelector('.item__name');
           if (itemName != null) {
             itemName.textContent = item.title;
