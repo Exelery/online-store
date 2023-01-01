@@ -42,18 +42,19 @@ export default class Filters {
     return brands;
   }
 
-  getMinMaxPrice(data: IProduct[]) {
-    const minMaxPrice: number[] = [];
-    const allPrices: number[] = [];
+  getMinMaxPrice(data: IProduct[], value: string) {
+    const minMax: number[] = [];
+    const all: number[] = [];
 
     data.forEach((val) => {
-      allPrices.push(val.price);
+      if (value === 'price') all.push(val.price);
+      if (value === 'stock') all.push(val.stock);
     });
 
-    allPrices.sort((x, y) => x - y);
-    minMaxPrice.push(allPrices[0]);
-    minMaxPrice.push(allPrices[allPrices.length - 1]);
-    return minMaxPrice;
+    all.sort((x, y) => x - y);
+    minMax.push(all[0]);
+    minMax.push(all[all.length - 1]);
+    return minMax;
   }
 
   drawCategoriesFilter(data: IProduct[]) {
@@ -77,8 +78,13 @@ export default class Filters {
   }
 
   drawPriceFilter(data: IProduct[]) {
-    this.dualSliderFilter.create('Price, $', this.getMinMaxPrice(data));
-    this.dualSliderFilter.control();
+    this.dualSliderFilter.create('Price', this.getMinMaxPrice(data, 'price'));
+    this.dualSliderFilter.control('Price', '$ ');
+  }
+
+  drawStockFilter(data: IProduct[]) {
+    this.dualSliderFilter.create('Stock', this.getMinMaxPrice(data, 'stock'));
+    this.dualSliderFilter.control('Stock');
   }
 
   addFiltersStructure() {
@@ -117,5 +123,6 @@ export default class Filters {
     this.drawCategoriesFilter(data);
     this.drawBrandsFilter(data);
     this.drawPriceFilter(data);
+    this.drawStockFilter(data);
   }
 }

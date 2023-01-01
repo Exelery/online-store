@@ -18,13 +18,13 @@ export default class DualSliderFilter {
 
       const filtersLower = document.createElement('span');
       filtersLower.classList.add('filters__lower');
-      filtersLower.id = 'range1';
+      filtersLower.id = `range1-${name}`;
       filtersLower.textContent = '';
       filtersRange.prepend(filtersLower);
 
       const filtersUpper = document.createElement('span');
       filtersUpper.classList.add('filters__lower');
-      filtersUpper.id = 'range2';
+      filtersUpper.id = `range2-${name}`;
       filtersUpper.textContent = '';
       filtersRange.append(filtersUpper);
 
@@ -33,7 +33,7 @@ export default class DualSliderFilter {
       filtersBlock.append(filtersDualRange);
 
       const sliderTrack = document.createElement('div');
-      sliderTrack.classList.add('slider-track');
+      sliderTrack.classList.add('slider-track', `${name}`);
       filtersDualRange.append(sliderTrack);
 
       const filtersLowerRange = document.createElement('input');
@@ -42,7 +42,7 @@ export default class DualSliderFilter {
       filtersLowerRange.min = `${arr[0]}`;
       filtersLowerRange.max = `${arr[1]}`;
       filtersLowerRange.value = `${arr[0]}`;
-      filtersLowerRange.id = 'slider-1';
+      filtersLowerRange.id = `slider1-${name}`;
       filtersDualRange.append(filtersLowerRange);
 
       const filtersUpperRange = document.createElement('input');
@@ -51,19 +51,20 @@ export default class DualSliderFilter {
       filtersUpperRange.min = `${arr[0]}`;
       filtersUpperRange.max = `${arr[1]}`;
       filtersUpperRange.value = `${arr[1]}`;
-      filtersUpperRange.id = 'slider-2';
+      filtersUpperRange.id = `slider2-${name}`;
       filtersDualRange.append(filtersUpperRange);
     }
   }
 
-  control() {
-    const sliderOne = document.getElementById('slider-1') as HTMLInputElement;
-    const sliderTwo = document.getElementById('slider-2') as HTMLInputElement;
-    const displayValOne = document.getElementById('range1') as HTMLSpanElement;
-    const displayValTwo = document.getElementById('range2') as HTMLSpanElement;
-    const sliderTrack = document.querySelector('.slider-track') as HTMLDivElement;
+  control(name: string, currency = '') {
+    console.log(`slider1-${name}`);
+    const sliderOne = document.getElementById(`slider1-${name}`) as HTMLInputElement;
+    const sliderTwo = document.getElementById(`slider2-${name}`) as HTMLInputElement;
+    const displayValOne = document.getElementById(`range1-${name}`) as HTMLSpanElement;
+    const displayValTwo = document.getElementById(`range2-${name}`) as HTMLSpanElement;
+    const sliderTrack = document.querySelector(`.slider-track.${name}`) as HTMLDivElement;
     const sliderMaxValue = sliderOne.max;
-    const minGap = 1;
+    const minGap = 0;
 
     sliderOne.addEventListener('input', slideOne);
     sliderTwo.addEventListener('input', slideTwo);
@@ -72,14 +73,14 @@ export default class DualSliderFilter {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
         sliderOne.value = (parseInt(sliderTwo.value) - minGap).toString();
       }
-      displayValOne.textContent = sliderOne.value;
+      displayValOne.textContent = `${currency} ${sliderOne.value}`;
       fillColor();
     }
     function slideTwo() {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
         sliderTwo.value = (parseInt(sliderOne.value) + minGap).toString();
       }
-      displayValTwo.textContent = sliderTwo.value;
+      displayValTwo.textContent = `${currency} ${sliderTwo.value}`;
       fillColor();
     }
     function fillColor() {
