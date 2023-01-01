@@ -5,11 +5,11 @@ export default class AppController {
   constructor() {
     this.router = new Router();
   }
-  appRouter(e: Event) {
+  appRouter(e: Event, path: string) {
     if (e.target instanceof HTMLElement) {
-      const item = e.target.closest('.item');
-      console.log('controller', item);
-      this.router.navigate('item');
+      // const item = e.target.closest('.item');
+      // console.log('controller', item);
+      this.router.navigate(path);
     }
   }
 }

@@ -18,10 +18,23 @@ export default class App {
     const data = this.model.productsAll;
     console.log(data);
     this.view.draw(data);
-    const productsContaner = document.querySelector('.products__items') as Element;
-    productsContaner.addEventListener('click', (e: Event) => {
+    const productsContaner = document.querySelector('.products__items');
+    const logo = document.querySelector('.header__title') as Element;
+
+    if (productsContaner) {
+      productsContaner.addEventListener('click', (e: Event) => {
+        if (e.target instanceof HTMLElement) {
+          const item = e.target.closest('.item');
+          if (item) {
+            this.controller.appRouter(e, 'product/n');
+          }
+        }
+      });
+    }
+
+    logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {
-        this.controller.appRouter(e);
+        this.controller.appRouter(e, '/');
       }
     });
 

@@ -1,3 +1,5 @@
+import PageError from '../view/404/404';
+
 // const router = (event: Event) => {
 //   event = event || window.event;
 //   event.preventDefault();
@@ -23,57 +25,74 @@
 // window.onpopstate = handleLocation;
 // // window.route = route
 
-type IRouteCB = (arr: object | undefined, match: RegExpMatchArray | null | undefined) => void;
+// type IRouteCB = (arr: object | undefined, match: RegExpMatchArray | null | undefined) => void;
+type IDrawCB = () => void;
 
 export default class Router {
-  routes: { path: string; cb: IRouteCB }[] = [];
+  pageError: PageError;
+  routes: { [key: string]: IDrawCB };
   root = '/';
   current = '';
   intervalControl: ReturnType<typeof setInterval>;
   constructor() {
+    this.pageError = new PageError();
+    this.routes = { none: this.pageError.draw };
     this.listen();
   }
 
-  add(path: string, cb: () => void) {
-    this.routes.push({
-      path,
-      cb,
-    });
-    return this;
-  }
+  // add(path: string, cb: () => void) {
+  //   this.routes.push({
+  //     path,
+  //     cb,
+  //   });
+  //   return this;
+  // }
 
   listen() {
-    console.log('test');
-    window.addEventListener('popstate', () => {
-      this.changePage();
-    });
+    console.log(this.clearSlashes(decodeURI(window.location.pathname + window.location.search)));
+    // window.addEventListener('popstate', () => {
+    //   this.changePage();
+    // });
+    this.checkUrl();
+
+    window.onpopstate = (event) => {
+      console.log('location: ' + document.location + ', state: ' + JSON.stringify(event.state));
+      this.checkUrl();
+    };
   }
 
   changePage() {
     if (this.current === this.getFragment()) return;
     this.current = this.getFragment();
-
-    this.routes.some((route) => {
-      const match = this.current.match(route.path);
-
-      if (match) {
-        match.shift();
-        //      route.cb.apply({}, match);
-        return match;
-      }
-      return false;
-    });
-  }
-
-  remove(path: string) {
-    for (let i = 0; i < this.routes.length; i += 1) {
-      if (this.routes[i].path === path) {
-        this.routes.slice(i, 1);
-        return this;
-      }
+    console.log('current', this.current);
+    if (this.routes[this.current]) {
+      this.routes[this.current]();
     }
-    return this;
+    // this.routes.some((route) => {
+    //   const match = this.current.match(route.path);
+
+    //   if (match) {
+    //     match.shift();
+    //     //      route.cb.apply({}, match);
+    //     return match;
+    //   }
+    //   return false;
+    // });
   }
+
+  checkUrl() {
+    this.changePage();
+  }
+
+  // remove(path: string) {
+  //   for (let i = 0; i < this.routes.length; i += 1) {
+  //     if (this.routes[i].path === path) {
+  //       this.routes.slice(i, 1);
+  //       return this;
+  //     }
+  //   }
+  //   return this;
+  // }
 
   clearSlashes(path: string) {
     return path.toString().replace(/\/$/, '').replace(/^\//, '');
@@ -91,11 +110,13 @@ export default class Router {
 
   navigate = (path = '') => {
     window.history.pushState(null, '', this.root + this.clearSlashes(path));
+    const popStateEvent = new PopStateEvent('popstate', { state: 'test' });
+    dispatchEvent(popStateEvent);
     return this;
   };
 
-  flush() {
-    this.routes = [];
-    return this;
-  }
+  // flush() {
+  //   this.routes = [];
+  //   return this;
+  // }
 }
