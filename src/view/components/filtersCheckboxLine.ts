@@ -1,4 +1,4 @@
-export default class FiltersItem {
+export default class FiltersCheckboxLine {
   createItem(data: [string, number]) {
     const filtersItem = document.createElement('li');
     filtersItem.classList.add('filters__item');

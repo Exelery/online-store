@@ -31,7 +31,6 @@ export default class MainPage {
   draw(data: IProduct[]) {
     this.addProductsSection();
     this.item.draw(data);
-    this.filters.drawCategoriesFilter(data);
-    this.filters.drawBrandsFilter(data);
+    this.filters.draw(data);
   }
 }

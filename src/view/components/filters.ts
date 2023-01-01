@@ -1,11 +1,17 @@
 import { IProduct } from '../../utils/types';
-import FiltersItem from './filtersItem';
+import FiltersCheckboxLine from './filtersCheckboxLine';
+import Btn from './btn';
+import DualSliderFilter from './dualSliderFilter';
 
 export default class Filters {
-  filtersItem: FiltersItem;
+  filtersItem: FiltersCheckboxLine;
+  btn: Btn;
+  dualSliderFilter: DualSliderFilter;
 
   constructor() {
-    this.filtersItem = new FiltersItem();
+    this.filtersItem = new FiltersCheckboxLine();
+    this.btn = new Btn();
+    this.dualSliderFilter = new DualSliderFilter();
   }
 
   getCategories(data: IProduct[]) {
@@ -36,7 +42,22 @@ export default class Filters {
     return brands;
   }
 
+  getMinMaxPrice(data: IProduct[]) {
+    const minMaxPrice: number[] = [];
+    const allPrices: number[] = [];
+
+    data.forEach((val) => {
+      allPrices.push(val.price);
+    });
+
+    allPrices.sort((x, y) => x - y);
+    minMaxPrice.push(allPrices[0]);
+    minMaxPrice.push(allPrices[allPrices.length - 1]);
+    return minMaxPrice;
+  }
+
   drawCategoriesFilter(data: IProduct[]) {
+    this.addFIltersBlock('Category', 'category');
     const categories = this.getCategories(data);
     const filtersListCategory = document.querySelector('.filters__list.category');
 
@@ -46,11 +67,55 @@ export default class Filters {
   }
 
   drawBrandsFilter(data: IProduct[]) {
+    this.addFIltersBlock('Brand', 'brand');
     const categories = this.getBrands(data);
-    const filtersListCategory = document.querySelector('.filters__list.brands');
+    const filtersListCategory = document.querySelector('.filters__list.brand');
 
     Object.entries(categories).forEach((val) => {
       if (filtersListCategory !== null) filtersListCategory.append(this.filtersItem.createItem(val));
     });
+  }
+
+  drawPriceFilter(data: IProduct[]) {
+    this.dualSliderFilter.create('Price, $', this.getMinMaxPrice(data));
+    this.dualSliderFilter.control();
+  }
+
+  addFiltersStructure() {
+    const productsInner = document.querySelector('.products__inner');
+    const productsFilter = document.createElement('div');
+    productsFilter.classList.add('products__filter', 'filters');
+
+    if (productsInner !== null) productsInner.prepend(productsFilter);
+
+    const filtersControl = document.createElement('div');
+    filtersControl.classList.add('filters__control');
+    productsFilter.append(filtersControl);
+
+    filtersControl.append(this.btn.draw('Reset filters', 'filters__reset'));
+    filtersControl.append(this.btn.draw('Copy Link', 'filters__copy'));
+  }
+
+  addFIltersBlock(blockName: string, className: string) {
+    const filters = document.querySelector('.filters.products__filter');
+    const filtersBlock = document.createElement('div');
+    filtersBlock.classList.add('filters__block');
+    if (filters !== null) filters.append(filtersBlock);
+
+    const filtersName = document.createElement('h3');
+    filtersName.classList.add('filters__name');
+    filtersName.textContent = blockName;
+    filtersBlock.append(filtersName);
+
+    const filtersList = document.createElement('ul');
+    filtersList.classList.add('filters__list', className);
+    filtersBlock.append(filtersList);
+  }
+
+  draw(data: IProduct[]) {
+    this.addFiltersStructure();
+    this.drawCategoriesFilter(data);
+    this.drawBrandsFilter(data);
+    this.drawPriceFilter(data);
   }
 }
