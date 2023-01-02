@@ -47,46 +47,48 @@ export default class AppController {
   }
 
   addUserEvents() {
-    const logo = document.querySelector('.header__title') as Element;
+    window.addEventListener('drawMainPage', () => {
+      console.log('working');
+      const productsContaner = document.querySelector('.products__items');
+      const search = document.querySelector('.products__search');
+      const sortBy = document.querySelector('.products__select');
 
-    const productsContaner = document.querySelector('.products__items');
-    const search = document.querySelector('.products__search');
-    const sortBy = document.querySelector('.products__select');
-
-    if (productsContaner) {
-      productsContaner.addEventListener('click', (e: Event) => {
-        if (e.target instanceof HTMLElement) {
-          const item = e.target.closest('.item');
-          console.log(item);
-          const addItem = e.target.closest('.item__add');
-          if (addItem) {
-            this.model.addItemToCart();
-          } else if (item) {
-            this.appRouter(e, 'product/n');
+      if (productsContaner) {
+        productsContaner.addEventListener('click', (e: Event) => {
+          if (e.target instanceof HTMLElement) {
+            const item = e.target.closest('.item');
+            console.log(item);
+            const addItem = e.target.closest('.item__add');
+            if (addItem) {
+              this.model.addItemToCart();
+            } else if (item) {
+              this.appRouter(e, 'product/n');
+            }
           }
-        }
-      });
-    }
+        });
+      }
 
-    if (search) {
-      search.addEventListener('input', (e: Event) => {
-        const field = e.target as HTMLInputElement;
-        if (field.value) {
-          this.model.filter.set('search', field.value);
-        } else {
-          this.model.filter.delete('search');
-        }
-        this.appRouter(e, '?' + this.model.filter.toString());
-      });
-    }
+      if (search) {
+        search.addEventListener('input', (e: Event) => {
+          const field = e.target as HTMLInputElement;
+          if (field.value) {
+            this.model.filter.set('search', field.value);
+          } else {
+            this.model.filter.delete('search');
+          }
+          this.appRouter(e, '?' + this.model.filter.toString());
+        });
+      }
 
-    if (sortBy) {
-      sortBy.addEventListener('change', (e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        this.model.filter.set('sort', select.value);
-        this.appRouter(e, '?' + this.model.filter.toString());
-      });
-    }
+      if (sortBy) {
+        sortBy.addEventListener('change', (e: Event) => {
+          const select = e.target as HTMLSelectElement;
+          this.model.filter.set('sort', select.value);
+          this.appRouter(e, '?' + this.model.filter.toString());
+        });
+      }
+    });
+    const logo = document.querySelector('.header__title') as Element;
 
     logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {

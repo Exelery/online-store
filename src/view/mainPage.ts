@@ -44,5 +44,6 @@ export default class MainPage {
     this.sortingBar.draw(data);
     this.filters.draw(data);
     this.item.draw(data);
+    dispatchEvent(new Event('drawMainPage'));
   }
 }
