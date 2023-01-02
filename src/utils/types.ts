@@ -25,3 +25,17 @@ export enum SortParm {
   ratingUp = 'rating-up',
   ratingDown = 'rating-down',
 }
+
+// interface StringByString {
+//   [key: string]: string | string[];
+// }
+
+export type IFilter = {
+  search?: string;
+  category?: string;
+  brand?: string;
+  priceMin?: string;
+  priceMax?: string;
+  stockMin?: string;
+  stockMax?: string;
+};
