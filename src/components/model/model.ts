@@ -4,8 +4,13 @@ import { IData, IProduct, SortParm } from '../../utils/types';
 export default class Model {
   private apiLoader: ApiLoader;
   productsAll: IProduct[];
-  public shoppingCart: { id: number; count: number; price: number }[] | null;
+  public shoppingCart: { id: number; count: number; price: number }[] | [];
+  // filters: IFilter;
+  filter: URLSearchParams;
   constructor() {
+    this.filter = new URLSearchParams(window.location.search);
+    // console.log('filter', this.filter.entries());
+    // console.log('filter', this.filter.getAll('brand'));
     this.apiLoader = new ApiLoader();
     // this.loadData();
     this.shoppingCart = this.getShoppingCart();
@@ -18,14 +23,17 @@ export default class Model {
   }
 
   public filterByRange(field: 'price' | 'stock', minValue: number, maxValue: number): IProduct[] {
+    // this.filter.set(field, `${minValue}%${maxValue}`);
     return this.productsAll.filter((item) => item[field] >= minValue && item[field] <= maxValue);
   }
 
   public filterByField(field: 'category' | 'brand', value: string): IProduct[] {
+    // this.filter.append(field, `${value}`);
     return this.productsAll.filter((item: IProduct) => item[field] === value);
   }
 
   public filterBySearch(value: string) {
+    // this.filter.set('search', `${value}`);
     return this.productsAll.filter(
       (item: IProduct) =>
         item.title.includes(value) ||
@@ -36,6 +44,7 @@ export default class Model {
   }
 
   public sortItems(dir: SortParm, arr: IProduct[]) {
+    // this.filter.set('sort', `${dir}`);
     switch (dir) {
       case SortParm.priceDown:
         return arr.sort((el1, el2) => el2.price - el1.price);
@@ -58,11 +67,12 @@ export default class Model {
       return JSON.parse(storage);
     }
     return null;
-    // public drawItemCards(item: IProduct[]){
-    // }
   }
-
   saveShoppingCart() {
     localStorage.setItem('shopping', JSON.stringify(this.shoppingCart));
+  }
+
+  addItemToCart() {
+    this.shoppingCart.push();
   }
 }

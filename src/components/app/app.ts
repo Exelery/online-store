@@ -8,23 +8,15 @@ export default class App {
   private controller: AppController;
 
   constructor() {
-    this.view = new MainPage();
-    this.model = new Model();
+    // this.view = new MainPage();
+    // this.model = new Model();
     this.controller = new AppController();
   }
 
   public async start() {
-    await this.model.loadData();
-    const data = this.model.productsAll;
-    console.log(data);
-    this.view.draw(data);
-    const productsContaner = document.querySelector('.products__items') as Element;
-    productsContaner.addEventListener('click', (e: Event) => {
-      if (e.target instanceof HTMLElement) {
-        this.controller.appRouter(e);
-      }
-    });
-
+    // await this.model.loadData();
+    // const data = this.model.productsAll;
+    // this.view.draw(data);
     // const content = document.querySelector('main-page__content') as Element;
   }
 }
