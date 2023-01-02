@@ -57,7 +57,6 @@ export default class DualSliderFilter {
   }
 
   control(name: string, currency = '') {
-    console.log(`slider1-${name}`);
     const sliderOne = document.getElementById(`slider1-${name}`) as HTMLInputElement;
     const sliderTwo = document.getElementById(`slider2-${name}`) as HTMLInputElement;
     const displayValOne = document.getElementById(`range1-${name}`) as HTMLSpanElement;
