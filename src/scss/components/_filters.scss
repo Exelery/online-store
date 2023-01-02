@@ -1,9 +1,9 @@
 .filters {
-  padding: 10px 5px;
+  padding: 10px 5px 0;
   border: 2px solid $blue;
   border-radius: 8px;
   background-color: $white;
-  max-height: 60vh;
+  height: fit-content;
 
   &__control {
     display: flex;
