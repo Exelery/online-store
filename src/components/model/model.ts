@@ -23,17 +23,17 @@ export default class Model {
   }
 
   public filterByRange(field: 'price' | 'stock', minValue: number, maxValue: number): IProduct[] {
-    this.filter.set(field, `${minValue}%${maxValue}`);
+    // this.filter.set(field, `${minValue}%${maxValue}`);
     return this.productsAll.filter((item) => item[field] >= minValue && item[field] <= maxValue);
   }
 
   public filterByField(field: 'category' | 'brand', value: string): IProduct[] {
-    this.filter.append(field, `${value}`);
+    // this.filter.append(field, `${value}`);
     return this.productsAll.filter((item: IProduct) => item[field] === value);
   }
 
   public filterBySearch(value: string) {
-    this.filter.set('search', `${value}`);
+    // this.filter.set('search', `${value}`);
     return this.productsAll.filter(
       (item: IProduct) =>
         item.title.includes(value) ||
@@ -44,7 +44,7 @@ export default class Model {
   }
 
   public sortItems(dir: SortParm, arr: IProduct[]) {
-    this.filter.set('sort', `${dir}`);
+    // this.filter.set('sort', `${dir}`);
     switch (dir) {
       case SortParm.priceDown:
         return arr.sort((el1, el2) => el2.price - el1.price);

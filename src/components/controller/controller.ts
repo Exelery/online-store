@@ -1,15 +1,16 @@
 import Router from '../../router/router';
 import Model from '../model/model';
 import Item from '../../view/item/item';
+import { SortParm } from '../../utils/types';
 
 export default class AppController {
   router: Router;
   model: Model;
-  private item: Item;
+  private items: Item;
   constructor() {
-    this.router = new Router();
+    this.router = new Router(this);
     this.model = new Model();
-    this.item = new Item();
+    this.items = new Item();
     this.start();
     this.updateCart();
     this.addUserEvents();
@@ -37,13 +38,17 @@ export default class AppController {
 
   public async start() {
     await this.model.loadData();
-    const data = this.model.productsAll;
-    this.item.draw(data);
+    // const data = this.model.productsAll;
+    const data = this.filterAndSortItems();
+    this.items.draw(data);
   }
 
   addUserEvents() {
-    const productsContaner = document.querySelector('.products__items');
     const logo = document.querySelector('.header__title') as Element;
+
+    const productsContaner = document.querySelector('.products__items');
+    const search = document.querySelector('.products__search');
+    const sortBy = document.querySelector('.products__select');
 
     if (productsContaner) {
       productsContaner.addEventListener('click', (e: Event) => {
@@ -60,10 +65,66 @@ export default class AppController {
       });
     }
 
+    if (search) {
+      search.addEventListener('input', (e: Event) => {
+        const field = e.target as HTMLInputElement;
+        if (field.value) {
+          this.model.filter.set('search', field.value);
+        } else {
+          this.model.filter.delete('search');
+        }
+        this.appRouter(e, '?' + this.model.filter.toString());
+      });
+    }
+
+    if (sortBy) {
+      sortBy.addEventListener('change', (e: Event) => {
+        const select = e.target as HTMLSelectElement;
+        this.model.filter.set('sort', select.value);
+        this.appRouter(e, '?' + this.model.filter.toString());
+      });
+    }
+
     logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {
         this.appRouter(e, '/');
       }
     });
+  }
+
+  filterAndSortItems() {
+    let data = this.model.productsAll.slice();
+    const filters = this.model.filter;
+    const price = filters.get('price');
+    if (price) {
+      const [min, max] = price.split('%').map(Number);
+      data = this.model.filterByRange('price', min, max);
+    }
+    const stock = filters.get('stock');
+    if (stock) {
+      const [min, max] = stock.split('%').map(Number);
+      data = this.model.filterByRange('stock', min, max);
+    }
+    const brand = filters.getAll('brand');
+    if (brand) {
+      brand.forEach((el) => {
+        data = this.model.filterByField('brand', el);
+      });
+    }
+    const category = filters.getAll('category');
+    if (category) {
+      category.forEach((el) => {
+        data = this.model.filterByField('category', el);
+      });
+    }
+    const search = filters.getAll('search').join(',');
+    if (search) {
+      data = this.model.filterBySearch(search);
+    }
+    const sort = filters.get('sort');
+    if (sort) {
+      data = this.model.sortItems(sort as SortParm, data);
+    }
+    return data;
   }
 }

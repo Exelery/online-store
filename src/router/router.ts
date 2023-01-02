@@ -1,4 +1,5 @@
 import PageError from '../view/404/404';
+import AppController from '../components/controller/controller';
 
 // const router = (event: Event) => {
 //   event = event || window.event;
@@ -29,12 +30,13 @@ import PageError from '../view/404/404';
 type IDrawCB = () => void;
 
 export default class Router {
+  controller: AppController;
   pageError: PageError;
   routes: { [key: string]: IDrawCB };
   root = '/';
   current = '';
-  intervalControl: ReturnType<typeof setInterval>;
-  constructor() {
+  constructor(control: AppController) {
+    this.controller = control;
     this.pageError = new PageError();
     this.routes = { none: this.pageError.draw };
     this.listen();
@@ -49,7 +51,7 @@ export default class Router {
   // }
 
   listen() {
-    console.log(this.clearSlashes(decodeURI(window.location.pathname + window.location.search)));
+    console.log('test', this.clearSlashes(decodeURI(window.location.pathname))); //+ window.location.search
     // window.addEventListener('popstate', () => {
     //   this.changePage();
     // });
