@@ -1,14 +1,14 @@
-import Item from '../../view/item/item';
+import MainPage from '../../view/mainPage';
 import Model from '../model/model';
 import AppController from '../controller/controller';
 export default class App {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private view: Item;
+  private view: MainPage;
   private model: Model;
   private controller: AppController;
 
   constructor() {
-    this.view = new Item();
+    this.view = new MainPage();
     this.model = new Model();
     this.controller = new AppController();
   }
