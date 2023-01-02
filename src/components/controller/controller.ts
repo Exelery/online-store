@@ -1,13 +1,16 @@
 import Router from '../../router/router';
+import MainPage from '../../view/mainPage';
 import Model from '../model/model';
-import Item from '../../view/item/item';
+import Item from '../../view/components/item';
 import { SortParm } from '../../utils/types';
 
 export default class AppController {
+  view: MainPage;
   router: Router;
   model: Model;
   private items: Item;
   constructor() {
+    this.view = new MainPage();
     this.router = new Router(this);
     this.model = new Model();
     this.items = new Item();
@@ -40,7 +43,7 @@ export default class AppController {
     await this.model.loadData();
     // const data = this.model.productsAll;
     const data = this.filterAndSortItems();
-    this.items.draw(data);
+    this.view.draw(data);
   }
 
   addUserEvents() {

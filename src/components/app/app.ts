@@ -8,8 +8,8 @@ export default class App {
   private controller: AppController;
 
   constructor() {
-    this.view = new MainPage();
-    this.model = new Model();
+    // this.view = new MainPage();
+    // this.model = new Model();
     this.controller = new AppController();
   }
 
