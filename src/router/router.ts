@@ -1,5 +1,6 @@
 import PageError from '../view/404/404';
 import AppController from '../components/controller/controller';
+// import { IRoutes } from '../utils/types';
 
 // const router = (event: Event) => {
 //   event = event || window.event;
@@ -27,6 +28,7 @@ import AppController from '../components/controller/controller';
 // // window.route = route
 
 // type IRouteCB = (arr: object | undefined, match: RegExpMatchArray | null | undefined) => void;
+
 type IDrawCB = () => void;
 
 export default class Router {
@@ -38,7 +40,8 @@ export default class Router {
   constructor(control: AppController) {
     this.controller = control;
     this.pageError = new PageError();
-    this.routes = { none: this.pageError.draw };
+    //     this.routes = { none: this.pageError.draw,
+    // };
     this.listen();
   }
 
@@ -51,40 +54,47 @@ export default class Router {
   // }
 
   listen() {
-    console.log('test', this.clearSlashes(decodeURI(window.location.pathname))); //+ window.location.search
+    console.log('test', this.clearSlashes(decodeURI(window.location.pathname)));
+    const path = this.clearSlashes(decodeURI(window.location.pathname));
+    console.log('path', path);
+    this.controller.loadPage(path);
+    //+ window.location.search
     // window.addEventListener('popstate', () => {
     //   this.changePage();
     // });
-    this.checkUrl();
+    // this.checkUrl();
 
     window.onpopstate = (event) => {
       console.log('location: ' + document.location + ', state: ' + JSON.stringify(event.state));
-      this.checkUrl();
+      const path = this.clearSlashes(decodeURI(window.location.pathname));
+      console.log('path', path);
+      this.controller.loadPage(path);
+      // this.checkUrl();
     };
   }
 
-  changePage() {
-    if (this.current === this.getFragment()) return;
-    this.current = this.getFragment();
-    console.log('current', this.current);
-    if (this.routes[this.current]) {
-      this.routes[this.current]();
-    }
-    // this.routes.some((route) => {
-    //   const match = this.current.match(route.path);
+  // changePage() {
+  //   if (this.current === this.getFragment()) return;
+  //   this.current = this.getFragment();
+  //   console.log('current', this.current);
+  //   if (this.routes[this.current]) {
+  //     this.routes[this.current]();
+  //   }
+  // this.routes.some((route) => {
+  //   const match = this.current.match(route.path);
 
-    //   if (match) {
-    //     match.shift();
-    //     //      route.cb.apply({}, match);
-    //     return match;
-    //   }
-    //   return false;
-    // });
-  }
+  //   if (match) {
+  //     match.shift();
+  //     //      route.cb.apply({}, match);
+  //     return match;
+  //   }
+  //   return false;
+  // });
+  // }
 
-  checkUrl() {
-    this.changePage();
-  }
+  // checkUrl() {
+  //   this.changePage();
+  // }
 
   // remove(path: string) {
   //   for (let i = 0; i < this.routes.length; i += 1) {
@@ -116,9 +126,4 @@ export default class Router {
     dispatchEvent(popStateEvent);
     return this;
   };
-
-  // flush() {
-  //   this.routes = [];
-  //   return this;
-  // }
 }
