@@ -1,20 +1,23 @@
 import Router from '../../router/router';
 import MainPage from '../../view/mainPage';
 import Model from '../model/model';
-import Item from '../../view/components/item';
-import { SortParm } from '../../utils/types';
+import PageError from '../../view/404/404';
+import MainPageController from './mainPageController';
+import { SortParm } from '../../utils/types'; //IProduct
 
 export default class AppController {
   view: MainPage;
   router: Router;
   model: Model;
-  private items: Item;
+  mainPageController: MainPageController;
+  pageError: PageError;
   constructor() {
     this.view = new MainPage();
-    this.router = new Router(this);
     this.model = new Model();
-    this.items = new Item();
-    this.start();
+    this.router = new Router(this);
+    this.pageError = new PageError();
+    this.mainPageController = new MainPageController(this);
+    // this.loadPage();
     this.updateCart();
     this.addUserEvents();
   }
@@ -39,59 +42,40 @@ export default class AppController {
     };
   }
 
-  public async start() {
-    await this.model.loadData();
-    // const data = this.model.productsAll;
+  public async loadPage(path = '') {
+    this.model.filter = new URLSearchParams(window.location.search);
+    const main = document.querySelector('.main') as Element;
+    if (!this.model.productsAll) {
+      await this.model.loadData();
+    }
+    const tempArr = path.split('/');
+    const foundItem = this.model.productsAll.find((el) => el.id === Number(tempArr[1]));
     const data = this.filterAndSortItems();
-    this.view.draw(data);
+    if (path === '') {
+      const productContainer = document.querySelector('.products__items');
+      if (productContainer) {
+        productContainer.innerHTML = '';
+        this.view.item.draw(data);
+      } else {
+        main.innerHTML = '';
+        this.view.draw(data);
+      }
+    } else if (tempArr.length === 2 && foundItem) {
+      // product draw(foundItem)
+      console.log('draw product', foundItem);
+    } else {
+      main.innerHTML = '';
+      this.pageError.draw();
+    }
   }
 
   addUserEvents() {
-    window.addEventListener('drawMainPage', () => {
-      console.log('working');
-      const productsContaner = document.querySelector('.products__items');
-      const search = document.querySelector('.products__search');
-      const sortBy = document.querySelector('.products__select');
-
-      if (productsContaner) {
-        productsContaner.addEventListener('click', (e: Event) => {
-          if (e.target instanceof HTMLElement) {
-            const item = e.target.closest('.item');
-            console.log(item);
-            const addItem = e.target.closest('.item__add');
-            if (addItem) {
-              this.model.addItemToCart();
-            } else if (item) {
-              this.appRouter(e, 'product/n');
-            }
-          }
-        });
-      }
-
-      if (search) {
-        search.addEventListener('input', (e: Event) => {
-          const field = e.target as HTMLInputElement;
-          if (field.value) {
-            this.model.filter.set('search', field.value);
-          } else {
-            this.model.filter.delete('search');
-          }
-          this.appRouter(e, '?' + this.model.filter.toString());
-        });
-      }
-
-      if (sortBy) {
-        sortBy.addEventListener('change', (e: Event) => {
-          const select = e.target as HTMLSelectElement;
-          this.model.filter.set('sort', select.value);
-          this.appRouter(e, '?' + this.model.filter.toString());
-        });
-      }
-    });
+    this.mainPageController.listen();
     const logo = document.querySelector('.header__title') as Element;
 
     logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {
+        // this.model.filter = new URLSearchParams();
         this.appRouter(e, '/');
       }
     });
@@ -118,6 +102,8 @@ export default class AppController {
     }
     const category = filters.getAll('category');
     if (category) {
+      // let temp: IProduct[];
+      // let includedId: number[];
       category.forEach((el) => {
         data = this.model.filterByField('category', el);
       });

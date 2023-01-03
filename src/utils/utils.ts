@@ -1,4 +1,4 @@
-import { IFilter } from './types';
+// import { IFilter } from './types';
 
 // export function transformToURLParams(filters: IFilter): string {
 //   const params = new URLSearchParams(filters);
