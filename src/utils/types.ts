@@ -39,3 +39,5 @@ export type IFilter = {
   stockMin?: string;
   stockMax?: string;
 };
+
+export type IRoutes = '' | 'cart' | 'product' | 'error';

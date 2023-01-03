@@ -8,7 +8,6 @@ export default class Model {
   // filters: IFilter;
   filter: URLSearchParams;
   constructor() {
-    this.filter = new URLSearchParams(window.location.search);
     // console.log('filter', this.filter.entries());
     // console.log('filter', this.filter.getAll('brand'));
     this.apiLoader = new ApiLoader();
@@ -34,12 +33,13 @@ export default class Model {
 
   public filterBySearch(value: string) {
     // this.filter.set('search', `${value}`);
+    value = value.toLocaleLowerCase().trim();
     return this.productsAll.filter(
       (item: IProduct) =>
-        item.title.includes(value) ||
-        item.brand.includes(value) ||
-        item.category.includes(value) ||
-        item.description.includes(value)
+        item.title.toLocaleLowerCase().includes(value) ||
+        item.brand.toLocaleLowerCase().includes(value) ||
+        item.category.toLocaleLowerCase().includes(value) ||
+        item.description.toLocaleLowerCase().includes(value)
     );
   }
 
