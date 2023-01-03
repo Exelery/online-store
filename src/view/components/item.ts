@@ -65,5 +65,13 @@ export default class Item {
         productsItems.append(fragment);
       }
     }
+
+    this.changeFoundItemsCount(data);
+  }
+
+  changeFoundItemsCount(data: IProduct[]) {
+    const countLabel = document.querySelector('.products__find');
+
+    if (countLabel !== null) countLabel.textContent = `Found: ${data.length}`;
   }
 }
