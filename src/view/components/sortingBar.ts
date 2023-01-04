@@ -59,6 +59,27 @@ export default class SortingBar {
         productsViewTile.append(document.createElement('span'));
         productsViewList.append(document.createElement('span'));
       }
+
+      productsViewMode.addEventListener('click', this.changeViewBtn);
+    }
+  }
+
+  changeViewBtn(e: Event) {
+    e.preventDefault;
+    if (e.target instanceof HTMLElement && e.target !== null) {
+      const productsViewMode = document.querySelector('.products__view-mode');
+      if (productsViewMode instanceof HTMLDivElement && productsViewMode !== null) {
+        productsViewMode.childNodes.forEach((val) => {
+          if (val instanceof HTMLElement) val.classList.remove('active-mode');
+        });
+        e.target.classList.add('active-mode');
+      }
+    }
+
+    const productsItems = document.querySelector('.products__items');
+    if (productsItems instanceof HTMLElement && productsItems !== null) {
+      productsItems.classList.toggle('tile');
+      productsItems.classList.toggle('list');
     }
   }
 }
