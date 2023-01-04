@@ -3,7 +3,7 @@ import MainPage from '../../view/mainPage';
 import Model from '../model/model';
 import PageError from '../../view/404/404';
 import MainPageController from './mainPageController';
-import { SortParm } from '../../utils/types'; //IProduct
+import { SortParm, ICart } from '../../utils/types'; //
 
 export default class AppController {
   view: MainPage;
@@ -25,21 +25,6 @@ export default class AppController {
     if (e.target instanceof HTMLElement) {
       this.router.navigate(path);
     }
-  }
-
-  updateCart() {
-    const totalSum = document.querySelector('.header__total--label') as Element;
-    const totalCart = document.querySelector('.header__cart--label') as Element;
-    window.onstorage = (event) => {
-      if (event.key !== 'shopping') return;
-      if (event.newValue) {
-        const cart: { id: number; count: number; price: number }[] = JSON.parse(event.newValue);
-        const sum = cart.reduce((acc, el) => (acc += el.price * el.count), 0);
-        const totalItems = cart.reduce((acc, el) => (acc += el.count), 0);
-        totalSum.textContent = `$ ${sum}`;
-        totalCart.textContent = `${totalItems}`;
-      }
-    };
   }
 
   public async loadPage(path = '') {
@@ -79,43 +64,57 @@ export default class AppController {
         this.appRouter(e, '/');
       }
     });
+
+    window.addEventListener('storage', this.updateCart);
+  }
+
+  updateCart() {
+    const totalSum = document.querySelector('.header__total--label') as Element;
+    const totalCart = document.querySelector('.header__cart--label') as Element;
+    const storageCart = localStorage.getItem('shopping');
+    if (storageCart) {
+      const cart: ICart[] = JSON.parse(storageCart);
+      const sum = cart.reduce((acc, el) => (acc += el.price * el.count), 0);
+      const totalItems = cart.reduce((acc, el) => (acc += el.count), 0);
+      totalSum.textContent = `$ ${sum}.00`;
+      totalCart.textContent = `${totalItems}`;
+    }
   }
 
   filterAndSortItems() {
     let data = this.model.productsAll.slice();
     const filters = this.model.filter;
+    // console.log(data, 'start', filters.toString());
     const price = filters.get('price');
     if (price) {
       const [min, max] = price.split('%').map(Number);
-      data = this.model.filterByRange('price', min, max);
+      data = this.model.filterByRange(data, 'price', min, max);
     }
     const stock = filters.get('stock');
     if (stock) {
       const [min, max] = stock.split('%').map(Number);
-      data = this.model.filterByRange('stock', min, max);
+      data = this.model.filterByRange(data, 'stock', min, max);
     }
     const brand = filters.getAll('brand');
-    if (brand) {
-      brand.forEach((el) => {
-        data = this.model.filterByField('brand', el);
-      });
+    if (brand.length > 0) {
+      // console.log('brand');
+      // let tempData:
+      data = this.model.filterByField(data, 'brand', brand);
     }
     const category = filters.getAll('category');
-    if (category) {
-      // let temp: IProduct[];
-      // let includedId: number[];
-      category.forEach((el) => {
-        data = this.model.filterByField('category', el);
-      });
+    if (category.length > 0) {
+      // console.log(category);
+      data = this.model.filterByField(data, 'category', category);
     }
     const search = filters.getAll('search').join(',');
     if (search) {
-      data = this.model.filterBySearch(search);
+      data = this.model.filterBySearch(data, search);
     }
     const sort = filters.get('sort');
     if (sort) {
       data = this.model.sortItems(sort as SortParm, data);
     }
+    // console.log(data, 'end');
     return data;
   }
 }

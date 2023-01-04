@@ -23,6 +23,8 @@ export default class MainPageController {
       const categories = document.querySelector('.filters__list.category');
       const brands = document.querySelector('.filters__list.brand');
       const resetBtn = document.querySelector('.filters__reset');
+      const priceWrapper = document.querySelector('.filters__block.wrapper.price');
+      const stockWrapper = document.querySelector('.filters__block.wrapper.stock');
 
       if (productsContaner) {
         productsContaner.addEventListener('click', (e: Event) => {
@@ -30,11 +32,13 @@ export default class MainPageController {
             const item = e.target.closest('.item');
             console.log(item?.getAttribute('data-id'));
             const addItem = e.target.closest('.item__add');
-            if (addItem) {
-              this.model.addItemToCart();
-            } else if (item) {
+            if (item) {
               const id = item.getAttribute('data-id');
-              this.controller.appRouter(e, `product/${id}`);
+              if (addItem && id) {
+                this.model.addItemToCart(id);
+              } else {
+                this.controller.appRouter(e, `product/${id}`);
+              }
             }
           }
         });
@@ -84,9 +88,32 @@ export default class MainPageController {
       }
 
       if (resetBtn) {
-        console.log(resetBtn);
         resetBtn.addEventListener('click', (e: Event) => {
           this.controller.appRouter(e, '/');
+        });
+      }
+      if (priceWrapper) {
+        priceWrapper.addEventListener('input', (e) => {
+          const minValue = parseInt((priceWrapper.querySelector('#range1-Price') as Element).innerHTML.slice(1));
+          const maxValue = parseInt((priceWrapper.querySelector('#range2-Price') as Element).innerHTML.slice(1));
+          console.log(minValue, maxValue);
+          // console.log(priceWrapper.querySelector('#range2-Price'));
+          // this.model.filter.delete('price');
+          this.model.filter.set('price', `${minValue}%${maxValue}`);
+          console.log(this.model.filter.toString());
+          this.controller.appRouter(e, '?' + this.model.filter.toString());
+        });
+      }
+      if (stockWrapper) {
+        stockWrapper.addEventListener('input', (e) => {
+          const minValue = parseInt((stockWrapper.querySelector('#range1-Stock') as Element).innerHTML.slice(1));
+          const maxValue = parseInt((stockWrapper.querySelector('#range2-Stock') as Element).innerHTML.slice(1));
+          console.log(minValue, maxValue);
+          // console.log(priceWrapper.querySelector('#range2-Price'));
+          // this.model.filter.delete('price');
+          this.model.filter.set('stock', `${minValue}%${maxValue}`);
+          console.log(this.model.filter.toString());
+          this.controller.appRouter(e, '?' + this.model.filter.toString());
         });
       }
     });
