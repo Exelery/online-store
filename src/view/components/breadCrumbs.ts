@@ -2,7 +2,7 @@ import { IProduct } from '../../utils/types';
 
 export default class BreadCrumbs {
   draw(data: IProduct) {
-    const container = document.querySelector('.container');
+    const container = document.querySelector('.product__inner');
 
     if (container !== null) {
       const breadCrumbs = document.createElement('div');
@@ -17,7 +17,7 @@ export default class BreadCrumbs {
         span.textContent = val.toUpperCase();
         breadCrumbs.append(span);
 
-        if ((i !== points.length - 1)) {
+        if (i !== points.length - 1) {
           const spanSeparator = document.createElement('span');
           spanSeparator.classList.add('breadcrumbs__separator');
           spanSeparator.textContent = '>>';
