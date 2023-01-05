@@ -64,7 +64,6 @@ export default class MainPageController {
         });
       }
       if (categories) {
-        // console.log(categories);
         categories.addEventListener('change', (e: Event) => {
           const checkedElement = categories.querySelectorAll(
             '.filters__item input:checked'
@@ -76,7 +75,6 @@ export default class MainPageController {
       }
 
       if (brands) {
-        // console.log(categories);
         brands.addEventListener('change', (e: Event) => {
           const checkedElement = brands.querySelectorAll(
             '.filters__item input:checked'
@@ -96,11 +94,7 @@ export default class MainPageController {
         priceWrapper.addEventListener('input', (e) => {
           const minValue = parseInt((priceWrapper.querySelector('#range1-Price') as Element).innerHTML.slice(1));
           const maxValue = parseInt((priceWrapper.querySelector('#range2-Price') as Element).innerHTML.slice(1));
-          console.log(minValue, maxValue);
-          // console.log(priceWrapper.querySelector('#range2-Price'));
-          // this.model.filter.delete('price');
           this.model.filter.set('price', `${minValue}%${maxValue}`);
-          console.log(this.model.filter.toString());
           this.controller.appRouter(e, '?' + this.model.filter.toString());
         });
       }
@@ -108,11 +102,7 @@ export default class MainPageController {
         stockWrapper.addEventListener('input', (e) => {
           const minValue = parseInt((stockWrapper.querySelector('#range1-Stock') as Element).innerHTML.slice(1));
           const maxValue = parseInt((stockWrapper.querySelector('#range2-Stock') as Element).innerHTML.slice(1));
-          console.log(minValue, maxValue);
-          // console.log(priceWrapper.querySelector('#range2-Price'));
-          // this.model.filter.delete('price');
           this.model.filter.set('stock', `${minValue}%${maxValue}`);
-          console.log(this.model.filter.toString());
           this.controller.appRouter(e, '?' + this.model.filter.toString());
         });
       }

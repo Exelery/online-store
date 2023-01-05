@@ -17,7 +17,9 @@ export default class AppController {
     this.router = new Router(this);
     this.pageError = new PageError();
     this.mainPageController = new MainPageController(this);
-    // this.loadPage();
+  }
+
+  start() {
     this.updateCart();
     this.addUserEvents();
   }
@@ -43,10 +45,9 @@ export default class AppController {
         this.view.item.draw(data);
       } else {
         main.innerHTML = '';
-        this.view.draw(data);
+        this.view.draw(data, this.model.productsAll);
       }
     } else if (tempArr.length === 2 && foundItem) {
-      // product draw(foundItem)
       console.log('draw product', foundItem);
     } else {
       main.innerHTML = '';
@@ -60,7 +61,6 @@ export default class AppController {
 
     logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {
-        // this.model.filter = new URLSearchParams();
         this.appRouter(e, '/');
       }
     });
