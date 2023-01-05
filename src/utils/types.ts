@@ -12,6 +12,10 @@ export interface IProduct {
   images: string[];
 }
 
+export interface IProductCount extends IProduct {
+  count: number;
+}
+
 export interface IData {
   products: IProduct[];
   total: number;
@@ -47,3 +51,5 @@ export interface ICart {
 }
 
 export type IRoutes = '' | 'cart' | 'product' | 'error';
+
+export type IDisplay = 'tile' | 'list';

@@ -1,33 +1,5 @@
 import PageError from '../view/404/404';
 import AppController from '../components/controller/controller';
-// import { IRoutes } from '../utils/types';
-
-// const router = (event: Event) => {
-//   event = event || window.event;
-//   event.preventDefault();
-//   const target = event.target as HTMLAnchorElement;
-//   window.history.pushState({}, '', target.href);
-// };
-
-// // пока не знаю что где
-// const routes = {
-//   404: 'component/pages/404.html',
-//   '/': '/index.html',
-//   '/count': 'component/count/count.html',
-//   '/product': 'component/product/product.html',
-// };
-
-// const handleLocation = async () => {
-//   const path = window.location.pathname;
-//   const route = routes[path as keyof typeof routes] || routes[404];
-//   const html = await fetch(route).then((data) => data.text());
-//   // document.getElementById('main-page')?.innerHTML = html;
-// };
-
-// window.onpopstate = handleLocation;
-// // window.route = route
-
-// type IRouteCB = (arr: object | undefined, match: RegExpMatchArray | null | undefined) => void;
 
 type IDrawCB = () => void;
 
@@ -40,36 +12,20 @@ export default class Router {
   constructor(control: AppController) {
     this.controller = control;
     this.pageError = new PageError();
-    //     this.routes = { none: this.pageError.draw,
-    // };
     this.listen();
   }
 
-  // add(path: string, cb: () => void) {
-  //   this.routes.push({
-  //     path,
-  //     cb,
-  //   });
-  //   return this;
-  // }
-
   listen() {
-    console.log('test', this.clearSlashes(decodeURI(window.location.pathname)));
+    // console.log('test', this.clearSlashes(decodeURI(window.location.pathname)));
     const path = this.clearSlashes(decodeURI(window.location.pathname));
-    console.log('path', path);
+    // console.log('path', path);
     this.controller.loadPage(path);
-    //+ window.location.search
-    // window.addEventListener('popstate', () => {
-    //   this.changePage();
-    // });
-    // this.checkUrl();
 
     window.onpopstate = (event) => {
       console.log('location: ' + document.location + ', state: ' + JSON.stringify(event.state));
       const path = this.clearSlashes(decodeURI(window.location.pathname));
-      console.log('path', path);
+      // console.log('path', path);
       this.controller.loadPage(path);
-      // this.checkUrl();
     };
   }
 
@@ -90,20 +46,6 @@ export default class Router {
   //   }
   //   return false;
   // });
-  // }
-
-  // checkUrl() {
-  //   this.changePage();
-  // }
-
-  // remove(path: string) {
-  //   for (let i = 0; i < this.routes.length; i += 1) {
-  //     if (this.routes[i].path === path) {
-  //       this.routes.slice(i, 1);
-  //       return this;
-  //     }
-  //   }
-  //   return this;
   // }
 
   clearSlashes(path: string) {

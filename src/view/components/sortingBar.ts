@@ -1,7 +1,7 @@
-import { IProduct } from '../../utils/types';
+import { IProduct, IDisplay } from '../../utils/types';
 
 export default class SortingBar {
-  draw(data: IProduct[]) {
+  draw(data: IProduct[], display: IDisplay) {
     const productsList = document.querySelector('.products__list');
 
     if (productsList !== null) {
@@ -48,38 +48,20 @@ export default class SortingBar {
       productsSort.append(productsViewMode);
 
       const productsViewTile = document.createElement('div');
-      productsViewTile.classList.add('products__view-tile', 'active-mode');
+      productsViewTile.classList.add('products__view-tile');
       productsViewMode.append(productsViewTile);
 
       const productsViewList = document.createElement('div');
       productsViewList.classList.add('products__view-list');
       productsViewMode.append(productsViewList);
 
+      if (display === 'tile') productsViewTile.classList.add('active-mode');
+      else productsViewList.classList.add('active-mode');
+
       for (let i = 0; i < 2; i++) {
         productsViewTile.append(document.createElement('span'));
         productsViewList.append(document.createElement('span'));
       }
-
-      productsViewMode.addEventListener('click', this.changeViewBtn);
-    }
-  }
-
-  changeViewBtn(e: Event) {
-    e.preventDefault;
-    if (e.target instanceof HTMLElement && e.target !== null) {
-      const productsViewMode = document.querySelector('.products__view-mode');
-      if (productsViewMode instanceof HTMLDivElement && productsViewMode !== null) {
-        productsViewMode.childNodes.forEach((val) => {
-          if (val instanceof HTMLElement) val.classList.remove('active-mode');
-        });
-        e.target.classList.add('active-mode');
-      }
-    }
-
-    const productsItems = document.querySelector('.products__items');
-    if (productsItems instanceof HTMLElement && productsItems !== null) {
-      productsItems.classList.toggle('tile');
-      productsItems.classList.toggle('list');
     }
   }
 }

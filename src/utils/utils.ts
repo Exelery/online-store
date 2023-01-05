@@ -1,17 +1,23 @@
-// import { IFilter } from './types';
+// import { IProduct } from './types';
 
-// export function transformToURLParams(filters: IFilter): string {
-//   const params = new URLSearchParams(filters);
+// export function getList(
+//   data: IProduct[],
+//   allData: IProduct[],
+//   type: 'brand' | 'category'
+// ): { [key: string]: [number, number] } {
+//   const list: { [key: string]: [number, number] } = {};
+//   allData.forEach((el) => {
+//     if (el[type] in list) {
+//       list[el[type]][1] += 1;
+//     } else {
+//       list[el[type]] = [0, 1];
+//     }
+//   });
+//   data.forEach((val) => {
+//     if (val[type] in list) {
+//       list[val[type]][0] += 1;
+//     }
+//   });
 
-//   return params.toString();
-// }
-
-// export function parseQuery(queryString: string) {
-//   const query = new URLSearchParams(queryString);
-//   const pairs = (queryString[0] === '?' ? queryString.slice(1) : queryString).split('&');
-//   for (let i = 0; i < pairs.length; i++) {
-//     const pair = pairs[i].split('=');
-//     query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-//   }
-//   return query;
+//   return list;
 // }
