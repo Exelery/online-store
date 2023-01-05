@@ -1,8 +1,8 @@
 // import './item.scss';
-import { IProduct } from '../../utils/types';
+import { IDisplay, IProduct } from '../../utils/types';
 
 export default class Item {
-  draw(data: IProduct[]) {
+  draw(data: IProduct[], display: IDisplay, searchValue = '') {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const itemTemp: HTMLTemplateElement | null = document.querySelector('#itemTemp');
 
@@ -67,11 +67,30 @@ export default class Item {
     }
 
     this.changeFoundItemsCount(data);
+    this.changeDisplayMode(display);
+    this.updateSearch(searchValue);
   }
 
   changeFoundItemsCount(data: IProduct[]) {
     const countLabel = document.querySelector('.products__find');
 
     if (countLabel !== null) countLabel.textContent = `Found: ${data.length}`;
+  }
+
+  changeDisplayMode(display: IDisplay) {
+    const anotherDisplay: IDisplay = display === 'list' ? 'tile' : 'list';
+    const productsItems = document.querySelector('.products__items');
+    if (productsItems) {
+      if (!productsItems.classList.contains(display)) {
+        productsItems.classList.add(display);
+        productsItems.classList.remove(anotherDisplay);
+      }
+    }
+  }
+  updateSearch(value: string) {
+    const search = document.querySelector('.products__search');
+    if (search instanceof HTMLInputElement) {
+      search.value = value;
+    }
   }
 }

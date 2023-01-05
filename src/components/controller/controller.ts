@@ -3,7 +3,7 @@ import MainPage from '../../view/mainPage';
 import Model from '../model/model';
 import PageError from '../../view/404/404';
 import MainPageController from './mainPageController';
-import { SortParm, ICart } from '../../utils/types';
+import { SortParm, ICart, IDisplay } from '../../utils/types';
 import ProductPage from '../../view/productPage';
 
 export default class AppController {
@@ -34,28 +34,31 @@ export default class AppController {
 
   public async loadPage(path = '') {
     this.model.filter = new URLSearchParams(window.location.search);
-    const main = document.querySelector('.main') as Element;
     if (!this.model.productsAll) {
       await this.model.loadData();
     }
     const tempArr = path.split('/');
+    // const regex = 'product/\b([1-9]|[1-4][0-9]|50)\b';
     const foundItem = this.model.productsAll.find((el) => el.id === Number(tempArr[1]));
     const data = this.filterAndSortItems();
+
+    let display: IDisplay = this.model.filter.get('display') as IDisplay;
+    if (display !== 'list') display = 'tile';
+    const search = this.model.filter.getAll('search').join(',') || '';
     if (path === '') {
       const productContainer = document.querySelector('.products__items');
       if (productContainer) {
         productContainer.innerHTML = '';
-        this.view.item.draw(data);
+        this.view.item.draw(data, display, search);
       } else {
-        main.innerHTML = '';
-        this.view.draw(data, this.model.productsAll);
+        this.view.draw(data, this.model.productsAll, display, search);
       }
     } else if (tempArr.length === 2 && foundItem) {
-      // product draw(foundItem)
       this.productPage.draw(foundItem);
-      console.log('draw product', foundItem);
+    } else if (path === 'cart') {
+      const cartItems = this.model.findItemsFromCart(this.model.shoppingCart);
+      console.log('cart Open', cartItems);
     } else {
-      main.innerHTML = '';
       this.pageError.draw();
     }
   }
@@ -63,10 +66,17 @@ export default class AppController {
   addUserEvents() {
     this.mainPageController.listen();
     const logo = document.querySelector('.header__title') as Element;
+    const cart = document.querySelector('.header__cart') as Element;
 
     logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {
         this.appRouter(e, '/');
+      }
+    });
+
+    cart.addEventListener('click', (e: Event) => {
+      if (e.target instanceof HTMLElement) {
+        this.appRouter(e, 'cart');
       }
     });
 

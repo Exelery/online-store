@@ -1,4 +1,4 @@
-import { IProduct } from '../utils/types';
+import { IProduct, IDisplay } from '../utils/types';
 import Item from './components/item';
 import Filters from './components/filters';
 import SortingBar from './components/sortingBar';
@@ -14,7 +14,7 @@ export default class MainPage {
     this.sortingBar = new SortingBar();
   }
 
-  addProductsSection() {
+  addProductsSection(display: IDisplay) {
     const main = document.querySelector('main') as HTMLElement;
 
     const section = document.createElement('section');
@@ -33,17 +33,18 @@ export default class MainPage {
     productsInner.append(productsList);
 
     const productsItems = document.createElement('ul');
-    productsItems.classList.add('products__items', 'tile');
+    productsItems.classList.add('products__items', display);
     productsList.append(productsItems);
 
+    main.innerHTML = '';
     main.append(section);
   }
 
-  draw(filteredData: IProduct[], allData: IProduct[]) {
-    this.addProductsSection();
-    this.sortingBar.draw(allData);
+  draw(filteredData: IProduct[], allData: IProduct[], display: IDisplay = 'tile', searchValue = '') {
+    this.addProductsSection(display);
+    this.sortingBar.draw(allData, display);
     this.filters.draw(allData);
-    this.item.draw(filteredData);
+    this.item.draw(filteredData, display, searchValue);
     dispatchEvent(new Event('drawMainPage'));
   }
 }

@@ -47,3 +47,5 @@ export interface ICart {
 }
 
 export type IRoutes = '' | 'cart' | 'product' | 'error';
+
+export type IDisplay = 'tile' | 'list';

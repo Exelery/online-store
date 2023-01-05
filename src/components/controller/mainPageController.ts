@@ -2,6 +2,7 @@ import AppController from './controller';
 import Router from '../../router/router';
 import MainPage from '../../view/mainPage';
 import Model from '../model/model';
+import { IDisplay } from '../../utils/types';
 
 export default class MainPageController {
   view: MainPage;
@@ -25,6 +26,7 @@ export default class MainPageController {
       const resetBtn = document.querySelector('.filters__reset');
       const priceWrapper = document.querySelector('.filters__block.wrapper.price');
       const stockWrapper = document.querySelector('.filters__block.wrapper.stock');
+      const productsViewMode = document.querySelector('.products__view-mode');
 
       if (productsContaner) {
         productsContaner.addEventListener('click', (e: Event) => {
@@ -63,6 +65,7 @@ export default class MainPageController {
           this.controller.appRouter(e, '?' + this.model.filter.toString());
         });
       }
+
       if (categories) {
         categories.addEventListener('change', (e: Event) => {
           const checkedElement = categories.querySelectorAll(
@@ -90,6 +93,7 @@ export default class MainPageController {
           this.controller.appRouter(e, '/');
         });
       }
+
       if (priceWrapper) {
         priceWrapper.addEventListener('input', (e) => {
           const minValue = parseInt((priceWrapper.querySelector('#range1-Price') as Element).innerHTML.slice(1));
@@ -98,6 +102,7 @@ export default class MainPageController {
           this.controller.appRouter(e, '?' + this.model.filter.toString());
         });
       }
+
       if (stockWrapper) {
         stockWrapper.addEventListener('input', (e) => {
           const minValue = parseInt((stockWrapper.querySelector('#range1-Stock') as Element).innerHTML.slice(1));
@@ -106,6 +111,35 @@ export default class MainPageController {
           this.controller.appRouter(e, '?' + this.model.filter.toString());
         });
       }
+
+      if (productsViewMode) {
+        productsViewMode.addEventListener('click', (e) => {
+          const tile = productsViewMode.querySelector('.products__view-tile');
+          const list = productsViewMode.querySelector('.products__view-list');
+
+          if (e.target instanceof HTMLElement) {
+            const tileTarget = e.target.closest('.products__view-tile');
+            const listTarget = e.target.closest('.products__view-list');
+
+            if (tileTarget && list) {
+              this.toggleDisplayClasses(tileTarget, list, 'tile', e);
+            } else if (listTarget && tile) {
+              this.toggleDisplayClasses(listTarget, tile, 'list', e);
+            }
+          }
+        });
+      }
     });
+  }
+
+  private toggleDisplayClasses(target: Element, another: Element, mode: IDisplay, event: Event) {
+    const activeTarget = target.classList.contains('active-mode');
+
+    if (!activeTarget) {
+      target.classList.add('active-mode');
+      another.classList.remove('active-mode');
+      this.model.filter.set('display', mode);
+      this.controller.appRouter(event, '?' + this.model.filter.toString());
+    }
   }
 }

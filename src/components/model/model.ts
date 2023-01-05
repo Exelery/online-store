@@ -79,9 +79,8 @@ export default class Model {
   }
 
   addItemToCart(id: string) {
-    console.log('adding', id);
     const item: IProduct | undefined = this.productsAll.find((el) => el.id === Number(id));
-    console.log(this.shoppingCart, 'start');
+    // console.log(this.shoppingCart, 'start');
     const indexInCart = this.shoppingCart.findIndex((el) => el.id === Number(id));
     if (item) {
       if (indexInCart > -1) {
@@ -95,7 +94,10 @@ export default class Model {
         });
       }
     }
-    console.log(this.shoppingCart);
     this.saveShoppingCart();
+  }
+
+  public findItemsFromCart(arr: ICart[]) {
+    return arr.map((el) => this.productsAll.find((e) => e.id === el.id));
   }
 }

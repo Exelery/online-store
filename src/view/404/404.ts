@@ -1,7 +1,7 @@
 export default class PageError {
   draw() {
-    const container = document.querySelector('.main') as Element;
-    container.innerHTML = 'page not found';
-    console.log('error', container);
+    const main = document.querySelector('.main') as Element;
+    main.innerHTML = 'page not found';
+    console.log('error', main);
   }
 }
