@@ -68,23 +68,13 @@ export default class MainPageController {
 
       if (categories) {
         categories.addEventListener('change', (e: Event) => {
-          const checkedElement = categories.querySelectorAll(
-            '.filters__item input:checked'
-          ) as NodeListOf<HTMLInputElement>;
-          this.model.filter.delete('category');
-          [...checkedElement].forEach((e: HTMLInputElement) => this.model.filter.append('category', e.id));
-          this.controller.appRouter(e, '?' + this.model.filter.toString());
+          this.checkboxInput(e, categories, 'category');
         });
       }
 
       if (brands) {
         brands.addEventListener('change', (e: Event) => {
-          const checkedElement = brands.querySelectorAll(
-            '.filters__item input:checked'
-          ) as NodeListOf<HTMLInputElement>;
-          this.model.filter.delete('brand');
-          [...checkedElement].forEach((e: HTMLInputElement) => this.model.filter.append('brand', e.id));
-          this.controller.appRouter(e, '?' + this.model.filter.toString());
+          this.checkboxInput(e, brands, 'brand');
         });
       }
 
@@ -130,6 +120,13 @@ export default class MainPageController {
         });
       }
     });
+  }
+
+  private checkboxInput(e: Event, target: Element, type: 'category' | 'brand') {
+    const checkedElement = target.querySelectorAll('.filters__item input:checked') as NodeListOf<HTMLInputElement>;
+    this.model.filter.delete(type);
+    [...checkedElement].forEach((e: HTMLInputElement) => this.model.filter.append(type, e.id));
+    this.controller.appRouter(e, '?' + this.model.filter.toString());
   }
 
   private toggleDisplayClasses(target: Element, another: Element, mode: IDisplay, event: Event) {

@@ -9,7 +9,7 @@ export default class Item {
   constructor() {
     this.filters = new Filters();
   }
-  draw(data: IProduct[], allData: IProduct[], display: IDisplay, searchValue = '') {
+  draw(data: IProduct[], allData: IProduct[], display: IDisplay, searchValue = '', category: string[] = []) {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const itemTemp: HTMLTemplateElement | null = document.querySelector('#itemTemp');
 
@@ -77,7 +77,7 @@ export default class Item {
     this.changeFoundItemsCount(data);
     this.changeDisplayMode(display);
     this.updateSearch(searchValue);
-    this.updateActualCategories(data, allData);
+    this.updateActualCategories(data, allData, category);
   }
 
   changeFoundItemsCount(data: IProduct[]) {
@@ -102,7 +102,7 @@ export default class Item {
       search.value = value;
     }
   }
-  updateActualCategories(data: IProduct[], allData: IProduct[]) {
+  updateActualCategories(data: IProduct[], allData: IProduct[], category: string[]) {
     const categoryBlock = document.querySelector('filters__category');
     const brandBlock = document.querySelector('filters__brand');
     if (categoryBlock && brandBlock) {
@@ -110,7 +110,7 @@ export default class Item {
       brandBlock.innerHTML = '';
     }
 
-    this.filters.drawBrandsFilter(data, allData);
-    this.filters.drawCategoriesFilter(data, allData);
+    this.filters.drawBrandsFilter(data, allData, category);
+    this.filters.drawCategoriesFilter(data, allData, category);
   }
 }

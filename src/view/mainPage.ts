@@ -40,11 +40,17 @@ export default class MainPage {
     main.append(section);
   }
 
-  draw(filteredData: IProduct[], allData: IProduct[], display: IDisplay = 'tile', searchValue = '') {
+  draw(
+    filteredData: IProduct[],
+    allData: IProduct[],
+    display: IDisplay = 'tile',
+    searchValue = '',
+    category: string[] = []
+  ) {
     this.addProductsSection(display);
     this.sortingBar.draw(allData, display);
     this.filters.draw(filteredData);
-    this.item.draw(filteredData, allData, display, searchValue);
+    this.item.draw(filteredData, allData, display, searchValue, category);
     dispatchEvent(new Event('drawMainPage'));
   }
 }

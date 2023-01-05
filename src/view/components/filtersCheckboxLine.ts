@@ -1,11 +1,14 @@
 export default class FiltersCheckboxLine {
-  createItem(data: [string, [number, number]]) {
+  createItem(data: [string, [number, number]], category: string[]) {
     const filtersItem = document.createElement('li');
     filtersItem.classList.add('filters__item');
 
     const input = document.createElement('input');
     input.id = data[0];
     input.type = 'checkbox';
+    if (category.includes(data[0])) {
+      input.checked = true;
+    }
     filtersItem.append(input);
 
     const label = document.createElement('label');
