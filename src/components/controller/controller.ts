@@ -3,16 +3,19 @@ import MainPage from '../../view/mainPage';
 import Model from '../model/model';
 import PageError from '../../view/404/404';
 import MainPageController from './mainPageController';
-import { SortParm, ICart } from '../../utils/types'; //
+import { SortParm, ICart } from '../../utils/types';
+import ProductPage from '../../view/productPage';
 
 export default class AppController {
   view: MainPage;
+  productPage: ProductPage;
   router: Router;
   model: Model;
   mainPageController: MainPageController;
   pageError: PageError;
   constructor() {
     this.view = new MainPage();
+    this.productPage = new ProductPage();
     this.model = new Model();
     this.router = new Router(this);
     this.pageError = new PageError();
@@ -48,6 +51,8 @@ export default class AppController {
         this.view.draw(data, this.model.productsAll);
       }
     } else if (tempArr.length === 2 && foundItem) {
+      // product draw(foundItem)
+      this.productPage.draw(foundItem);
       console.log('draw product', foundItem);
     } else {
       main.innerHTML = '';
