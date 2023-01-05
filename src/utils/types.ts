@@ -12,6 +12,10 @@ export interface IProduct {
   images: string[];
 }
 
+export interface IProductCount extends IProduct {
+  count: number;
+}
+
 export interface IData {
   products: IProduct[];
   total: number;

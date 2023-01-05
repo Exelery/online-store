@@ -1,5 +1,5 @@
 export default class FiltersCheckboxLine {
-  createItem(data: [string, number]) {
+  createItem(data: [string, [number, number]]) {
     const filtersItem = document.createElement('li');
     filtersItem.classList.add('filters__item');
 
@@ -14,7 +14,14 @@ export default class FiltersCheckboxLine {
     filtersItem.append(label);
 
     const span = document.createElement('span');
-    span.textContent = `${data[1]}/${data[1]}`;
+    const actualCount = document.createElement('span');
+    const allCount = document.createElement('span');
+    actualCount.classList.add('actual');
+    actualCount.textContent = `${data[1][0]}`;
+    allCount.textContent = `/ ${data[1][1]}`;
+    span.append(actualCount);
+    span.append(allCount);
+    // span.textContent = ``;
     filtersItem.append(span);
 
     return filtersItem;

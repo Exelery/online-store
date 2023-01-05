@@ -14,32 +14,26 @@ export default class Filters {
     this.dualSliderFilter = new DualSliderFilter();
   }
 
-  getCategories(data: IProduct[]) {
-    const categories: { [key: string]: number } = {};
-
-    data.forEach((val) => {
-      if (val.category in categories) {
-        categories[val.category] += 1;
+  private getList(
+    data: IProduct[],
+    allData: IProduct[],
+    type: 'brand' | 'category'
+  ): { [key: string]: [number, number] } {
+    const list: { [key: string]: [number, number] } = {};
+    allData.forEach((el) => {
+      if (el[type] in list) {
+        list[el[type]][1] += 1;
       } else {
-        categories[val.category] = 1;
+        list[el[type]] = [0, 1];
+      }
+    });
+    data.forEach((val) => {
+      if (val[type] in list) {
+        list[val[type]][0] += 1;
       }
     });
 
-    return categories;
-  }
-
-  getBrands(data: IProduct[]) {
-    const brands: { [key: string]: number } = {};
-
-    data.forEach((val) => {
-      if (val.brand in brands) {
-        brands[val.brand] += 1;
-      } else {
-        brands[val.brand] = 1;
-      }
-    });
-
-    return brands;
+    return list;
   }
 
   getMinMaxPrice(data: IProduct[], value: string) {
@@ -57,24 +51,29 @@ export default class Filters {
     return minMax;
   }
 
-  drawCategoriesFilter(data: IProduct[]) {
+  drawCategoriesFilter(data: IProduct[], allData: IProduct[]) {
     this.addFIltersBlock('Category', 'category');
-    const categories = this.getCategories(data);
-    const filtersListCategory = document.querySelector('.filters__list.category');
+    const categories = this.getList(data, allData, 'category');
 
-    Object.entries(categories).forEach((val) => {
-      if (filtersListCategory !== null) filtersListCategory.append(this.filtersItem.createItem(val));
-    });
+    const filtersListCategory = document.querySelector('.filters__list.category');
+    if (filtersListCategory) {
+      filtersListCategory.innerHTML = '';
+      Object.entries(categories).forEach((val) => {
+        filtersListCategory.append(this.filtersItem.createItem(val));
+      });
+    }
   }
 
-  drawBrandsFilter(data: IProduct[]) {
+  drawBrandsFilter(data: IProduct[], allData: IProduct[]) {
     this.addFIltersBlock('Brand', 'brand');
-    const categories = this.getBrands(data);
+    const categories = this.getList(data, allData, 'brand');
     const filtersListCategory = document.querySelector('.filters__list.brand');
-
-    Object.entries(categories).forEach((val) => {
-      if (filtersListCategory !== null) filtersListCategory.append(this.filtersItem.createItem(val));
-    });
+    if (filtersListCategory) {
+      filtersListCategory.innerHTML = '';
+      Object.entries(categories).forEach((val) => {
+        filtersListCategory.append(this.filtersItem.createItem(val));
+      });
+    }
   }
 
   drawPriceFilter(data: IProduct[]) {
@@ -105,7 +104,7 @@ export default class Filters {
   addFIltersBlock(blockName: string, className: string) {
     const filters = document.querySelector('.filters.products__filter');
     const filtersBlock = document.createElement('div');
-    filtersBlock.classList.add('filters__block');
+    filtersBlock.classList.add('filters__block', `filters__${className}`);
     if (filters !== null) filters.append(filtersBlock);
 
     const filtersName = document.createElement('h3');
@@ -118,10 +117,10 @@ export default class Filters {
     filtersBlock.append(filtersList);
   }
 
-  draw(data: IProduct[]) {
+  draw(data: IProduct[], allData: IProduct[]) {
     this.addFiltersStructure();
-    this.drawCategoriesFilter(data);
-    this.drawBrandsFilter(data);
+    this.drawCategoriesFilter(data, allData);
+    this.drawBrandsFilter(data, allData);
     this.drawPriceFilter(data);
     this.drawStockFilter(data);
   }

@@ -1,8 +1,15 @@
 // import './item.scss';
 import { IDisplay, IProduct } from '../../utils/types';
+import Filters from './filters';
+// import { getList } from '../../utils/utils';
 
 export default class Item {
-  draw(data: IProduct[], display: IDisplay, searchValue = '') {
+  filters: Filters;
+
+  constructor() {
+    this.filters = new Filters();
+  }
+  draw(data: IProduct[], allData: IProduct[], display: IDisplay, searchValue = '') {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const itemTemp: HTMLTemplateElement | null = document.querySelector('#itemTemp');
 
@@ -62,6 +69,7 @@ export default class Item {
 
       const productsItems: HTMLElement | null = document.querySelector('.products__items');
       if (productsItems != null) {
+        productsItems.innerHTML = '';
         productsItems.append(fragment);
       }
     }
@@ -69,6 +77,7 @@ export default class Item {
     this.changeFoundItemsCount(data);
     this.changeDisplayMode(display);
     this.updateSearch(searchValue);
+    this.updateActualCategories(data, allData);
   }
 
   changeFoundItemsCount(data: IProduct[]) {
@@ -92,5 +101,16 @@ export default class Item {
     if (search instanceof HTMLInputElement) {
       search.value = value;
     }
+  }
+  updateActualCategories(data: IProduct[], allData: IProduct[]) {
+    const categoryBlock = document.querySelector('filters__category');
+    const brandBlock = document.querySelector('filters__brand');
+    if (categoryBlock && brandBlock) {
+      categoryBlock.innerHTML = '';
+      brandBlock.innerHTML = '';
+    }
+
+    this.filters.drawBrandsFilter(data, allData);
+    this.filters.drawCategoriesFilter(data, allData);
   }
 }

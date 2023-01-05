@@ -98,6 +98,11 @@ export default class Model {
   }
 
   public findItemsFromCart(arr: ICart[]) {
-    return arr.map((el) => this.productsAll.find((e) => e.id === el.id));
+    return arr.map((el) => {
+      const item: IProduct | undefined = this.productsAll.find((e) => e.id === el.id);
+      if (item) {
+        return { ...item, count: el.count };
+      }
+    });
   }
 }
