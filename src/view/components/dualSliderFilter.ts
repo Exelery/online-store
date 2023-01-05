@@ -1,10 +1,13 @@
 export default class DualSliderFilter {
+  minValue: number;
+  maxValue: number;
+
   create(name: string, arr: number[]) {
     const filters = document.querySelector('.filters.products__filter');
 
     if (filters !== null) {
       const filtersBlock = document.createElement('div');
-      filtersBlock.classList.add('filters__block', 'wrapper');
+      filtersBlock.classList.add('filters__block', 'wrapper', name.toLowerCase());
       filters.append(filtersBlock);
 
       const filtersName = document.createElement('h3');
@@ -74,6 +77,7 @@ export default class DualSliderFilter {
       }
       displayValOne.textContent = `${currency} ${sliderOne.value}`;
       fillColor();
+      // console.log(parseInt(sliderOne.value));
     }
     function slideTwo() {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
@@ -81,6 +85,7 @@ export default class DualSliderFilter {
       }
       displayValTwo.textContent = `${currency} ${sliderTwo.value}`;
       fillColor();
+      // console.log(parseInt(sliderTwo.value));
     }
     function fillColor() {
       const percent1 = (+sliderOne.value / +sliderMaxValue) * 100;

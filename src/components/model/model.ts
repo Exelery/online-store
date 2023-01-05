@@ -1,10 +1,10 @@
 import { ApiLoader } from '../../loader/loader';
-import { IData, IProduct, SortParm } from '../../utils/types';
+import { IData, IProduct, SortParm, ICart } from '../../utils/types';
 
 export default class Model {
   private apiLoader: ApiLoader;
   productsAll: IProduct[];
-  public shoppingCart: { id: number; count: number; price: number }[] | [];
+  public shoppingCart: ICart[];
   // filters: IFilter;
   filter: URLSearchParams;
   constructor() {
@@ -12,7 +12,7 @@ export default class Model {
     // console.log('filter', this.filter.getAll('brand'));
     this.apiLoader = new ApiLoader();
     // this.loadData();
-    this.shoppingCart = this.getShoppingCart();
+    this.shoppingCart = this.getShoppingCart() || [];
   }
 
   async loadData() {
@@ -21,20 +21,24 @@ export default class Model {
     this.productsAll = json.products;
   }
 
-  public filterByRange(field: 'price' | 'stock', minValue: number, maxValue: number): IProduct[] {
+  public filterByRange(data: IProduct[], field: 'price' | 'stock', minValue: number, maxValue: number): IProduct[] {
     // this.filter.set(field, `${minValue}%${maxValue}`);
-    return this.productsAll.filter((item) => item[field] >= minValue && item[field] <= maxValue);
+    return data.filter((item) => item[field] >= minValue && item[field] <= maxValue);
   }
 
-  public filterByField(field: 'category' | 'brand', value: string): IProduct[] {
+  public filterByField(data: IProduct[], field: 'category' | 'brand', value: string[]): IProduct[] {
     // this.filter.append(field, `${value}`);
-    return this.productsAll.filter((item: IProduct) => item[field] === value);
+    let tempData: IProduct[] = [];
+    value.forEach((el) => {
+      tempData = [...tempData, ...data.filter((item: IProduct) => item[field] === el)];
+    });
+    return tempData;
   }
 
-  public filterBySearch(value: string) {
+  public filterBySearch(data: IProduct[], value: string) {
     // this.filter.set('search', `${value}`);
     value = value.toLocaleLowerCase().trim();
-    return this.productsAll.filter(
+    return data.filter(
       (item: IProduct) =>
         item.title.toLocaleLowerCase().includes(value) ||
         item.brand.toLocaleLowerCase().includes(value) ||
@@ -63,16 +67,35 @@ export default class Model {
 
   getShoppingCart() {
     const storage: string | null = localStorage.getItem('shopping');
+    console.log(storage);
     if (storage) {
       return JSON.parse(storage);
     }
-    return null;
+    return [];
   }
   saveShoppingCart() {
     localStorage.setItem('shopping', JSON.stringify(this.shoppingCart));
+    dispatchEvent(new Event('storage'));
   }
 
-  addItemToCart() {
-    this.shoppingCart.push();
+  addItemToCart(id: string) {
+    console.log('adding', id);
+    const item: IProduct | undefined = this.productsAll.find((el) => el.id === Number(id));
+    console.log(this.shoppingCart, 'start');
+    const indexInCart = this.shoppingCart.findIndex((el) => el.id === Number(id));
+    if (item) {
+      if (indexInCart > -1) {
+        // this.shoppingCart[id].count++;
+        this.shoppingCart.splice(indexInCart, 1); // temp
+      } else {
+        this.shoppingCart.push({
+          id: item.id,
+          count: 1,
+          price: item.price,
+        });
+      }
+    }
+    console.log(this.shoppingCart);
+    this.saveShoppingCart();
   }
 }

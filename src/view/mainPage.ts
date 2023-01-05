@@ -39,11 +39,11 @@ export default class MainPage {
     main.append(section);
   }
 
-  draw(data: IProduct[]) {
+  draw(filteredData: IProduct[], allData: IProduct[]) {
     this.addProductsSection();
-    this.sortingBar.draw(data);
-    this.filters.draw(data);
-    this.item.draw(data);
+    this.sortingBar.draw(allData);
+    this.filters.draw(allData);
+    this.item.draw(filteredData);
     dispatchEvent(new Event('drawMainPage'));
   }
 }

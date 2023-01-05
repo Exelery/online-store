@@ -40,4 +40,10 @@ export type IFilter = {
   stockMax?: string;
 };
 
+export interface ICart {
+  id: number;
+  count: number;
+  price: number;
+}
+
 export type IRoutes = '' | 'cart' | 'product' | 'error';
