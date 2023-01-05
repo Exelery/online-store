@@ -45,13 +45,14 @@ export default class AppController {
     let display: IDisplay = this.model.filter.get('display') as IDisplay;
     if (display !== 'list') display = 'tile';
     const search = this.model.filter.getAll('search').join(',') || '';
-    // const category = this.model.filter.getAll('category');
+    const categoryAndBrand = [...this.model.filter.getAll('category'), ...this.model.filter.getAll('brand')] || [];
+    console.log(categoryAndBrand);
     if (path === '') {
       const productContainer = document.querySelector('.products__items');
       if (productContainer) {
-        this.view.item.draw(data, this.model.productsAll, display, search);
+        this.view.item.draw(data, this.model.productsAll, display, search, categoryAndBrand);
       } else {
-        this.view.draw(data, this.model.productsAll, display, search);
+        this.view.draw(data, this.model.productsAll, display, search, categoryAndBrand);
       }
     } else if (tempArr.length === 2 && foundItem) {
       this.productPage.draw(foundItem);

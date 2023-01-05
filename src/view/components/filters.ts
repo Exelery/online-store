@@ -51,7 +51,7 @@ export default class Filters {
     return minMax;
   }
 
-  drawCategoriesFilter(data: IProduct[], allData: IProduct[]) {
+  drawCategoriesFilter(data: IProduct[], allData: IProduct[], category: string[]) {
     // this.addFIltersBlock('Category', 'category');
     const categories = this.getList(data, allData, 'category');
 
@@ -59,19 +59,19 @@ export default class Filters {
     if (filtersListCategory) {
       filtersListCategory.innerHTML = '';
       Object.entries(categories).forEach((val) => {
-        filtersListCategory.append(this.filtersItem.createItem(val));
+        filtersListCategory.append(this.filtersItem.createItem(val, category));
       });
     }
   }
 
-  drawBrandsFilter(data: IProduct[], allData: IProduct[]) {
+  drawBrandsFilter(data: IProduct[], allData: IProduct[], category: string[]) {
     // this.addFIltersBlock('Brand', 'brand');
     const categories = this.getList(data, allData, 'brand');
     const filtersListCategory = document.querySelector('.filters__list.brand');
     if (filtersListCategory) {
       filtersListCategory.innerHTML = '';
       Object.entries(categories).forEach((val) => {
-        filtersListCategory.append(this.filtersItem.createItem(val));
+        filtersListCategory.append(this.filtersItem.createItem(val, category));
       });
     }
   }
