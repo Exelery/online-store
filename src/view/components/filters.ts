@@ -52,7 +52,7 @@ export default class Filters {
   }
 
   drawCategoriesFilter(data: IProduct[], allData: IProduct[]) {
-    this.addFIltersBlock('Category', 'category');
+    // this.addFIltersBlock('Category', 'category');
     const categories = this.getList(data, allData, 'category');
 
     const filtersListCategory = document.querySelector('.filters__list.category');
@@ -65,7 +65,7 @@ export default class Filters {
   }
 
   drawBrandsFilter(data: IProduct[], allData: IProduct[]) {
-    this.addFIltersBlock('Brand', 'brand');
+    // this.addFIltersBlock('Brand', 'brand');
     const categories = this.getList(data, allData, 'brand');
     const filtersListCategory = document.querySelector('.filters__list.brand');
     if (filtersListCategory) {
@@ -99,6 +99,8 @@ export default class Filters {
 
     filtersControl.append(this.btn.draw('Reset filters', 'filters__reset'));
     filtersControl.append(this.btn.draw('Copy Link', 'filters__copy'));
+    this.addFIltersBlock('Category', 'category');
+    this.addFIltersBlock('Brand', 'brand');
   }
 
   addFIltersBlock(blockName: string, className: string) {
@@ -117,10 +119,11 @@ export default class Filters {
     filtersBlock.append(filtersList);
   }
 
-  draw(data: IProduct[], allData: IProduct[]) {
+  draw(data: IProduct[]) {
+    //allData: IProduct[]
     this.addFiltersStructure();
-    this.drawCategoriesFilter(data, allData);
-    this.drawBrandsFilter(data, allData);
+    // this.drawCategoriesFilter(data, allData);
+    // this.drawBrandsFilter(data, allData);
     this.drawPriceFilter(data);
     this.drawStockFilter(data);
   }
