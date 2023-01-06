@@ -81,9 +81,17 @@ export default class Filters {
     this.dualSliderFilter.control('Price', '$ ');
   }
 
+  setPriceSliderValues(data: IProduct[]) {
+    this.dualSliderFilter.setSliderValues('Price', '$ ', this.getMinMaxPrice(data, 'price'));
+  }
+
   drawStockFilter(data: IProduct[]) {
     this.dualSliderFilter.create('Stock', this.getMinMaxPrice(data, 'stock'));
     this.dualSliderFilter.control('Stock');
+  }
+
+  setStockSliderValues(data: IProduct[]) {
+    this.dualSliderFilter.setSliderValues('Stock', '', this.getMinMaxPrice(data, 'stock'));
   }
 
   addFiltersStructure() {

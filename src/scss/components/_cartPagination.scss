@@ -1,0 +1,45 @@
+.cart {
+
+  &__empty {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    margin-top: 10%;
+  }
+
+  &__products {
+    width: 69%;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: $white;
+    box-shadow: 0 1px 2px 1px rgb(0 0 0 / 16%);
+  }
+
+  &__title {
+    margin-right: auto;
+  }
+
+  &__limit {
+    margin-right: 5%;
+    font-weight: 500;
+  }
+
+  &__page-numbers {
+    font-weight: 500;
+  }
+
+  &__limit-input {
+    width: 50px;
+  }
+}
+
+.btn-left,
+.btn-right {
+  cursor: pointer;
+}

@@ -5,10 +5,12 @@ import PageError from '../../view/404/404';
 import MainPageController from './mainPageController';
 import { SortParm, ICart, IDisplay, IProductCount } from '../../utils/types';
 import ProductPage from '../../view/productPage';
+import CartPage from '../../view/cartPage';
 
 export default class AppController {
   view: MainPage;
   productPage: ProductPage;
+  cartPage: CartPage;
   router: Router;
   model: Model;
   mainPageController: MainPageController;
@@ -16,6 +18,7 @@ export default class AppController {
   constructor() {
     this.view = new MainPage();
     this.productPage = new ProductPage();
+    this.cartPage = new CartPage();
     this.model = new Model();
     this.router = new Router(this);
     this.pageError = new PageError();
@@ -59,6 +62,7 @@ export default class AppController {
     } else if (path === 'cart') {
       const cartItems: IProductCount[] = this.model.findItemsFromCart(this.model.shoppingCart) as IProductCount[];
       console.log('cart Open', cartItems);
+      this.cartPage.draw(cartItems);
     } else {
       this.pageError.draw();
     }
