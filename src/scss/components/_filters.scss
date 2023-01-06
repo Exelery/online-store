@@ -37,6 +37,10 @@
     display: flex;
   }
 
+  &__item > input {
+    cursor: pointer;
+  }
+
   &__item span {
     display: inline-block;
     margin-left: auto;

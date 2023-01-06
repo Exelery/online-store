@@ -96,4 +96,19 @@ export default class DualSliderFilter {
     slideOne();
     slideTwo();
   }
+
+  setSliderValues(name: string, currency = '', arr: number[]) {
+    const sliderOne = document.getElementById(`slider1-${name}`) as HTMLInputElement;
+    const sliderTwo = document.getElementById(`slider2-${name}`) as HTMLInputElement;
+    // const displayValOne = document.getElementById(`range1-${name}`) as HTMLSpanElement;
+    // const displayValTwo = document.getElementById(`range2-${name}`) as HTMLSpanElement;
+
+    sliderOne.value = arr[0].toString();
+    sliderTwo.value = arr[1].toString();
+
+    // displayValOne.textContent = `${currency} ${sliderOne.value}`;
+    // displayValTwo.textContent = `${currency} ${sliderTwo.value}`;
+
+    this.control(name, currency);
+  }
 }

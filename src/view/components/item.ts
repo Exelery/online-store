@@ -78,6 +78,9 @@ export default class Item {
     this.changeDisplayMode(display);
     this.updateSearch(searchValue);
     this.updateActualCategories(data, allData, category);
+
+    this.filters.setPriceSliderValues(data);
+    this.filters.setStockSliderValues(data);
   }
 
   changeFoundItemsCount(data: IProduct[]) {
