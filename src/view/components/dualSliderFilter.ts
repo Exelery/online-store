@@ -2,7 +2,7 @@ export default class DualSliderFilter {
   minValue: number;
   maxValue: number;
 
-  create(name: string, arr: number[]) {
+  create(name: string, arr: number[], allMinMax: number[]) {
     const filters = document.querySelector('.filters.products__filter');
 
     if (filters !== null) {
@@ -42,8 +42,8 @@ export default class DualSliderFilter {
       const filtersLowerRange = document.createElement('input');
       filtersLowerRange.classList.add('filters__lower-range');
       filtersLowerRange.type = 'range';
-      filtersLowerRange.min = `${arr[0]}`;
-      filtersLowerRange.max = `${arr[1]}`;
+      filtersLowerRange.min = `${allMinMax[0]}`;
+      filtersLowerRange.max = `${allMinMax[1]}`;
       filtersLowerRange.value = `${arr[0]}`;
       filtersLowerRange.id = `slider1-${name}`;
       filtersDualRange.append(filtersLowerRange);
@@ -51,8 +51,8 @@ export default class DualSliderFilter {
       const filtersUpperRange = document.createElement('input');
       filtersUpperRange.classList.add('filters__upper-range');
       filtersUpperRange.type = 'range';
-      filtersUpperRange.min = `${arr[0]}`;
-      filtersUpperRange.max = `${arr[1]}`;
+      filtersUpperRange.min = `${allMinMax[0]}`;
+      filtersUpperRange.max = `${allMinMax[1]}`;
       filtersUpperRange.value = `${arr[1]}`;
       filtersUpperRange.id = `slider2-${name}`;
       filtersDualRange.append(filtersUpperRange);
@@ -75,6 +75,9 @@ export default class DualSliderFilter {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
         sliderOne.value = (parseInt(sliderTwo.value) - minGap).toString();
       }
+      console.log(sliderOne.value);
+      sliderOne.style.cssText = 'z-index: 10';
+      sliderTwo.style.cssText = '';
       displayValOne.textContent = `${currency} ${sliderOne.value}`;
       fillColor();
       // console.log(parseInt(sliderOne.value));
@@ -83,6 +86,8 @@ export default class DualSliderFilter {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
         sliderTwo.value = (parseInt(sliderOne.value) + minGap).toString();
       }
+      sliderOne.style.cssText = '';
+      sliderTwo.style.cssText = 'z-index: 10';
       displayValTwo.textContent = `${currency} ${sliderTwo.value}`;
       fillColor();
       // console.log(parseInt(sliderTwo.value));
@@ -91,6 +96,7 @@ export default class DualSliderFilter {
       const percent1 = (+sliderOne.value / +sliderMaxValue) * 100;
       const percent2 = (+sliderTwo.value / +sliderMaxValue) * 100;
       sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`;
+      // console.log(percent1, percent2);
     }
 
     slideOne();

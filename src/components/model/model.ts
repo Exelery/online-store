@@ -62,6 +62,8 @@ export default class Model {
       case SortParm.ratingUp:
         return arr.sort((el1, el2) => el1.rating - el2.rating);
         break;
+      default:
+        return arr;
     }
   }
 

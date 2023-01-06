@@ -1,7 +1,7 @@
-import { IProduct, IDisplay } from '../../utils/types';
+import { IProduct, IFilter } from '../../utils/types';
 
 export default class SortingBar {
-  draw(data: IProduct[], display: IDisplay) {
+  draw(data: IProduct[], filters: IFilter) {
     const productsList = document.querySelector('.products__list');
 
     if (productsList !== null) {
@@ -55,7 +55,7 @@ export default class SortingBar {
       productsViewList.classList.add('products__view-list');
       productsViewMode.append(productsViewList);
 
-      if (display === 'tile') productsViewTile.classList.add('active-mode');
+      if (filters.display === 'tile') productsViewTile.classList.add('active-mode');
       else productsViewList.classList.add('active-mode');
 
       for (let i = 0; i < 2; i++) {

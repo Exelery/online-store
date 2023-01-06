@@ -36,12 +36,13 @@ export enum SortParm {
 
 export type IFilter = {
   search?: string;
-  category?: string;
-  brand?: string;
-  priceMin?: string;
-  priceMax?: string;
-  stockMin?: string;
-  stockMax?: string;
+  category: string[];
+  brand: string[];
+  price?: number[];
+  stock?: number[];
+  display: IDisplay;
+  sort?: SortParm | string;
+  changePriceOrStock?: boolean;
 };
 
 export interface ICart {

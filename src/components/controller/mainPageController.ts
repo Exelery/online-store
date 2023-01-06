@@ -89,7 +89,9 @@ export default class MainPageController {
           const minValue = parseInt((priceWrapper.querySelector('#range1-Price') as Element).innerHTML.slice(1));
           const maxValue = parseInt((priceWrapper.querySelector('#range2-Price') as Element).innerHTML.slice(1));
           this.model.filter.set('price', `${minValue}%${maxValue}`);
+          this.controller.changeSliders();
           this.controller.appRouter(e, '?' + this.model.filter.toString());
+          this.controller.view.item.changeSlidersValue('stock');
         });
       }
 
@@ -98,7 +100,9 @@ export default class MainPageController {
           const minValue = parseInt((stockWrapper.querySelector('#range1-Stock') as Element).innerHTML.slice(1));
           const maxValue = parseInt((stockWrapper.querySelector('#range2-Stock') as Element).innerHTML.slice(1));
           this.model.filter.set('stock', `${minValue}%${maxValue}`);
+          this.controller.changeSliders();
           this.controller.appRouter(e, '?' + this.model.filter.toString());
+          this.controller.view.item.changeSlidersValue('price');
         });
       }
 
