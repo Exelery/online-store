@@ -67,6 +67,7 @@ export default class DualSliderFilter {
     const sliderTrack = document.querySelector(`.slider-track.${name}`) as HTMLDivElement;
     const sliderMaxValue = sliderOne.max;
     const minGap = 0;
+    const maxValue = sliderOne.getAttribute('max') as string;
 
     sliderOne.addEventListener('input', slideOne);
     sliderTwo.addEventListener('input', slideTwo);
@@ -76,8 +77,11 @@ export default class DualSliderFilter {
         sliderOne.value = (parseInt(sliderTwo.value) - minGap).toString();
       }
       console.log(sliderOne.value);
-      sliderOne.style.cssText = 'z-index: 10';
-      sliderTwo.style.cssText = '';
+      if (Number(sliderOne.value) >= Number(maxValue) / 2) {
+        sliderOne.style.cssText = 'z-index: 10';
+      } else {
+        sliderOne.style.cssText = '';
+      }
       displayValOne.textContent = `${currency} ${sliderOne.value}`;
       fillColor();
       // console.log(parseInt(sliderOne.value));
@@ -86,8 +90,11 @@ export default class DualSliderFilter {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
         sliderTwo.value = (parseInt(sliderOne.value) + minGap).toString();
       }
-      sliderOne.style.cssText = '';
-      sliderTwo.style.cssText = 'z-index: 10';
+      if (Number(sliderTwo.value) < Number(maxValue) / 2) {
+        sliderTwo.style.cssText = 'z-index: 10';
+      } else {
+        sliderTwo.style.cssText = '';
+      }
       displayValTwo.textContent = `${currency} ${sliderTwo.value}`;
       fillColor();
       // console.log(parseInt(sliderTwo.value));
