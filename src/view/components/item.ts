@@ -1,13 +1,16 @@
 // import './item.scss';
 import { IDisplay, IFilter, IProduct } from '../../utils/types';
 import Filters from './filters';
+import SortingBar from './sortingBar';
 // import { getList } from '../../utils/utils';
 
 export default class Item {
   filters: Filters;
   data: IProduct[];
+  sortringBar: SortingBar;
 
   constructor() {
+    this.sortringBar = new SortingBar();
     this.filters = new Filters();
   }
   draw(data: IProduct[], allData: IProduct[], filters: IFilter) {
@@ -82,6 +85,7 @@ export default class Item {
       this.updateSearch(filters.search);
     }
     this.updateActualCategories(data, allData, filters);
+    this.changeSortingValue(filters);
   }
 
   changeFoundItemsCount(data: IProduct[]) {
@@ -130,5 +134,9 @@ export default class Item {
         this.filters.setStockSliderValues(data);
       }
     }
+  }
+
+  changeSortingValue(filtes: IFilter) {
+    this.sortringBar.drawSelect(filtes);
   }
 }

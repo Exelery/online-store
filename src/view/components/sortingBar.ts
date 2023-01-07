@@ -18,15 +18,7 @@ export default class SortingBar {
       productsSelect.name = 'select';
       productsSortBar.append(productsSelect);
 
-      const optionValue = ['price-up', 'price-down', 'rating-up', 'rating-down'];
-      const optionText = ['\u{21E7} Price', '\u{21E9} Price', '\u{21E7} Rating', '\u{21E9} Rating'];
-
-      optionValue.forEach((val, i) => {
-        const option = document.createElement('option');
-        option.value = val;
-        option.textContent = optionText[i];
-        productsSelect.append(option);
-      });
+      // this.drawSelect(filters);
 
       const productsFind = document.createElement('div');
       productsFind.classList.add('products__find');
@@ -62,6 +54,27 @@ export default class SortingBar {
         productsViewTile.append(document.createElement('span'));
         productsViewList.append(document.createElement('span'));
       }
+    }
+  }
+
+  drawSelect(filters: IFilter) {
+    const productsSelect = document.querySelector('.products__select');
+    if (productsSelect) {
+      const optionValue = ['', 'price-up', 'price-down', 'rating-up', 'rating-down'];
+      const optionText = ['Sorting', '\u{21E7} Price', '\u{21E9} Price', '\u{21E7} Rating', '\u{21E9} Rating'];
+      productsSelect.innerHTML = '';
+      optionValue.forEach((val, i) => {
+        const option = document.createElement('option');
+        if (val === '') {
+          option.hidden = true;
+        }
+        if (val === filters.sort) {
+          option.defaultSelected = true;
+        }
+        option.value = val;
+        option.textContent = optionText[i];
+        productsSelect.append(option);
+      });
     }
   }
 }

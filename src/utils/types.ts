@@ -41,7 +41,7 @@ export type IFilter = {
   price?: number[];
   stock?: number[];
   display: IDisplay;
-  sort?: SortParm | string;
+  sort: SortParm | string;
   changePriceOrStock?: boolean;
 };
 
