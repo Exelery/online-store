@@ -76,7 +76,6 @@ export default class DualSliderFilter {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
         sliderOne.value = (parseInt(sliderTwo.value) - minGap).toString();
       }
-      console.log(sliderOne.value);
       if (Number(sliderOne.value) >= Number(maxValue) / 2) {
         sliderOne.style.cssText = 'z-index: 10';
       } else {
@@ -84,7 +83,6 @@ export default class DualSliderFilter {
       }
       displayValOne.textContent = `${currency} ${sliderOne.value}`;
       fillColor();
-      // console.log(parseInt(sliderOne.value));
     }
     function slideTwo() {
       if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {

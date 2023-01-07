@@ -43,6 +43,7 @@ export type IFilter = {
   display: IDisplay;
   sort: SortParm | string;
   changePriceOrStock?: boolean;
+  cartIds: number[];
 };
 
 export interface ICart {

@@ -1,8 +1,6 @@
-// import './item.scss';
 import { IDisplay, IFilter, IProduct } from '../../utils/types';
 import Filters from './filters';
 import SortingBar from './sortingBar';
-// import { getList } from '../../utils/utils';
 
 export default class Item {
   filters: Filters;
@@ -68,6 +66,13 @@ export default class Item {
             itemStock.textContent = item.stock.toString();
           }
 
+          const button: HTMLElement | null = sourceClone.querySelector('.item__add');
+          if (button) {
+            if (filters.cartIds.includes(item.id)) {
+              button.textContent = 'Drop from cart';
+            }
+          }
+
           fragment.append(sourceClone);
         }
       });
@@ -120,7 +125,6 @@ export default class Item {
 
     this.filters.drawBrandsFilter(data, allData, options.brand);
     this.filters.drawCategoriesFilter(data, allData, options.category);
-    console.log(options.changePriceOrStock);
     if (!options.changePriceOrStock) {
       this.changeSlidersValue('price');
       this.changeSlidersValue('stock');

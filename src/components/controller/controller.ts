@@ -16,6 +16,7 @@ export default class AppController {
   mainPageController: MainPageController;
   pageError: PageError;
   tourchSliders: boolean;
+  cart: ICart[];
   constructor() {
     this.view = new MainPage();
     this.productPage = new ProductPage();
@@ -91,9 +92,9 @@ export default class AppController {
     const totalCart = document.querySelector('.header__cart--label') as Element;
     const storageCart = localStorage.getItem('shopping');
     if (storageCart) {
-      const cart: ICart[] = JSON.parse(storageCart);
-      const sum = cart.reduce((acc, el) => (acc += el.price * el.count), 0);
-      const totalItems = cart.reduce((acc, el) => (acc += el.count), 0);
+      this.cart = JSON.parse(storageCart);
+      const sum = this.cart.reduce((acc, el) => (acc += el.price * el.count), 0);
+      const totalItems = this.cart.reduce((acc, el) => (acc += el.count), 0);
       totalSum.textContent = `$ ${sum}.00`;
       totalCart.textContent = `${totalItems}`;
     }
@@ -128,12 +129,15 @@ export default class AppController {
   }
 
   updateFilters(modelFilter: URLSearchParams): IFilter {
+    const allId = this.cart.map((el) => el.id);
+    console.log(allId);
     const filters: IFilter = {
       display: 'tile',
       sort: '',
       category: [],
       brand: [],
       changePriceOrStock: this.tourchSliders,
+      cartIds: allId,
     };
     const price = modelFilter.get('price');
     if (price) filters.price = price.split('%').map(Number);
