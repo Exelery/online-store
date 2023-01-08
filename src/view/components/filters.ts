@@ -76,8 +76,8 @@ export default class Filters {
     }
   }
 
-  drawPriceFilter(data: IProduct[]) {
-    this.dualSliderFilter.create('Price', this.getMinMaxPrice(data, 'price'));
+  drawPriceFilter(data: IProduct[], allData: IProduct[]) {
+    this.dualSliderFilter.create('Price', this.getMinMaxPrice(data, 'price'), this.getMinMaxPrice(allData, 'price'));
     this.dualSliderFilter.control('Price', '$ ');
   }
 
@@ -85,8 +85,8 @@ export default class Filters {
     this.dualSliderFilter.setSliderValues('Price', '$ ', this.getMinMaxPrice(data, 'price'));
   }
 
-  drawStockFilter(data: IProduct[]) {
-    this.dualSliderFilter.create('Stock', this.getMinMaxPrice(data, 'stock'));
+  drawStockFilter(data: IProduct[], allData: IProduct[]) {
+    this.dualSliderFilter.create('Stock', this.getMinMaxPrice(data, 'stock'), this.getMinMaxPrice(allData, 'stock'));
     this.dualSliderFilter.control('Stock');
   }
 
@@ -127,12 +127,12 @@ export default class Filters {
     filtersBlock.append(filtersList);
   }
 
-  draw(data: IProduct[]) {
+  draw(data: IProduct[], allData: IProduct[]) {
     //allData: IProduct[]
     this.addFiltersStructure();
     // this.drawCategoriesFilter(data, allData);
     // this.drawBrandsFilter(data, allData);
-    this.drawPriceFilter(data);
-    this.drawStockFilter(data);
+    this.drawPriceFilter(data, allData);
+    this.drawStockFilter(data, allData);
   }
 }

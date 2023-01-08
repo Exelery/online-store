@@ -1,4 +1,4 @@
-import { IProduct, IDisplay } from '../utils/types';
+import { IProduct, IDisplay, IFilter } from '../utils/types';
 import Item from './components/item';
 import Filters from './components/filters';
 import SortingBar from './components/sortingBar';
@@ -40,17 +40,11 @@ export default class MainPage {
     main.append(section);
   }
 
-  draw(
-    filteredData: IProduct[],
-    allData: IProduct[],
-    display: IDisplay = 'tile',
-    searchValue = '',
-    category: string[] = []
-  ) {
-    this.addProductsSection(display);
-    this.sortingBar.draw(allData, display);
-    this.filters.draw(filteredData);
-    this.item.draw(filteredData, allData, display, searchValue, category);
+  draw(filteredData: IProduct[], allData: IProduct[], filters: IFilter) {
+    this.addProductsSection(filters.display);
+    this.sortingBar.draw(allData, filters);
+    this.filters.draw(filteredData, allData);
+    this.item.draw(filteredData, allData, filters);
     dispatchEvent(new Event('drawMainPage'));
   }
 }

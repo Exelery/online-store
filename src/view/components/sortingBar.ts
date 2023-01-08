@@ -1,7 +1,7 @@
-import { IProduct, IDisplay } from '../../utils/types';
+import { IProduct, IFilter } from '../../utils/types';
 
 export default class SortingBar {
-  draw(data: IProduct[], display: IDisplay) {
+  draw(data: IProduct[], filters: IFilter) {
     const productsList = document.querySelector('.products__list');
 
     if (productsList !== null) {
@@ -18,15 +18,7 @@ export default class SortingBar {
       productsSelect.name = 'select';
       productsSortBar.append(productsSelect);
 
-      const optionValue = ['price-up', 'price-down', 'rating-up', 'rating-down'];
-      const optionText = ['\u{21E7} Price', '\u{21E9} Price', '\u{21E7} Rating', '\u{21E9} Rating'];
-
-      optionValue.forEach((val, i) => {
-        const option = document.createElement('option');
-        option.value = val;
-        option.textContent = optionText[i];
-        productsSelect.append(option);
-      });
+      // this.drawSelect(filters);
 
       const productsFind = document.createElement('div');
       productsFind.classList.add('products__find');
@@ -55,13 +47,34 @@ export default class SortingBar {
       productsViewList.classList.add('products__view-list');
       productsViewMode.append(productsViewList);
 
-      if (display === 'tile') productsViewTile.classList.add('active-mode');
+      if (filters.display === 'tile') productsViewTile.classList.add('active-mode');
       else productsViewList.classList.add('active-mode');
 
       for (let i = 0; i < 2; i++) {
         productsViewTile.append(document.createElement('span'));
         productsViewList.append(document.createElement('span'));
       }
+    }
+  }
+
+  drawSelect(filters: IFilter) {
+    const productsSelect = document.querySelector('.products__select');
+    if (productsSelect) {
+      const optionValue = ['', 'price-up', 'price-down', 'rating-up', 'rating-down'];
+      const optionText = ['Sorting', '\u{21E7} Price', '\u{21E9} Price', '\u{21E7} Rating', '\u{21E9} Rating'];
+      productsSelect.innerHTML = '';
+      optionValue.forEach((val, i) => {
+        const option = document.createElement('option');
+        if (val === '') {
+          option.hidden = true;
+        }
+        if (val === filters.sort) {
+          option.defaultSelected = true;
+        }
+        option.value = val;
+        option.textContent = optionText[i];
+        productsSelect.append(option);
+      });
     }
   }
 }

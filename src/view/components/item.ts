@@ -1,15 +1,18 @@
-// import './item.scss';
-import { IDisplay, IProduct } from '../../utils/types';
+import { IDisplay, IFilter, IProduct } from '../../utils/types';
 import Filters from './filters';
-// import { getList } from '../../utils/utils';
+import SortingBar from './sortingBar';
 
 export default class Item {
   filters: Filters;
+  data: IProduct[];
+  sortringBar: SortingBar;
 
   constructor() {
+    this.sortringBar = new SortingBar();
     this.filters = new Filters();
   }
-  draw(data: IProduct[], allData: IProduct[], display: IDisplay, searchValue = '', category: string[] = []) {
+  draw(data: IProduct[], allData: IProduct[], filters: IFilter) {
+    this.data = data;
     const fragment: DocumentFragment = document.createDocumentFragment();
     const itemTemp: HTMLTemplateElement | null = document.querySelector('#itemTemp');
 
@@ -63,6 +66,13 @@ export default class Item {
             itemStock.textContent = item.stock.toString();
           }
 
+          const button: HTMLElement | null = sourceClone.querySelector('.item__add');
+          if (button) {
+            if (filters.cartIds.includes(item.id)) {
+              button.textContent = 'Drop from cart';
+            }
+          }
+
           fragment.append(sourceClone);
         }
       });
@@ -75,12 +85,12 @@ export default class Item {
     }
 
     this.changeFoundItemsCount(data);
-    this.changeDisplayMode(display);
-    this.updateSearch(searchValue);
-    this.updateActualCategories(data, allData, category);
-
-    this.filters.setPriceSliderValues(data);
-    this.filters.setStockSliderValues(data);
+    this.changeDisplayMode(filters.display);
+    if (filters.search) {
+      this.updateSearch(filters.search);
+    }
+    this.updateActualCategories(data, allData, filters);
+    this.changeSortingValue(filters);
   }
 
   changeFoundItemsCount(data: IProduct[]) {
@@ -105,7 +115,7 @@ export default class Item {
       search.value = value;
     }
   }
-  updateActualCategories(data: IProduct[], allData: IProduct[], category: string[]) {
+  updateActualCategories(data: IProduct[], allData: IProduct[], options: IFilter) {
     const categoryBlock = document.querySelector('filters__category');
     const brandBlock = document.querySelector('filters__brand');
     if (categoryBlock && brandBlock) {
@@ -113,7 +123,24 @@ export default class Item {
       brandBlock.innerHTML = '';
     }
 
-    this.filters.drawBrandsFilter(data, allData, category);
-    this.filters.drawCategoriesFilter(data, allData, category);
+    this.filters.drawBrandsFilter(data, allData, options.brand);
+    this.filters.drawCategoriesFilter(data, allData, options.category);
+    if (!options.changePriceOrStock) {
+      this.changeSlidersValue('price');
+      this.changeSlidersValue('stock');
+    }
+  }
+  changeSlidersValue(target: 'price' | 'stock', data = this.data) {
+    if (data.length > 0) {
+      if (target === 'price') {
+        this.filters.setPriceSliderValues(data);
+      } else {
+        this.filters.setStockSliderValues(data);
+      }
+    }
+  }
+
+  changeSortingValue(filtes: IFilter) {
+    this.sortringBar.drawSelect(filtes);
   }
 }

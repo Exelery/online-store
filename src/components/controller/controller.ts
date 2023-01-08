@@ -3,7 +3,7 @@ import MainPage from '../../view/mainPage';
 import Model from '../model/model';
 import PageError from '../../view/404/404';
 import MainPageController from './mainPageController';
-import { SortParm, ICart, IDisplay, IProductCount } from '../../utils/types';
+import { SortParm, ICart, IDisplay, IProductCount, IFilter } from '../../utils/types';
 import ProductPage from '../../view/productPage';
 import CartPage from '../../view/cartPage';
 
@@ -15,6 +15,8 @@ export default class AppController {
   model: Model;
   mainPageController: MainPageController;
   pageError: PageError;
+  tourchSliders: boolean;
+  cart: ICart[];
   constructor() {
     this.view = new MainPage();
     this.productPage = new ProductPage();
@@ -23,11 +25,13 @@ export default class AppController {
     this.router = new Router(this);
     this.pageError = new PageError();
     this.mainPageController = new MainPageController(this);
+    this.cart = [];
   }
 
   start() {
     this.updateCart();
     this.addUserEvents();
+    this.tourchSliders = true;
   }
   appRouter(e: Event, path: string) {
     if (e.target instanceof HTMLElement) {
@@ -43,19 +47,14 @@ export default class AppController {
     const tempArr = path.split('/');
     // const regex = 'product/\b([1-9]|[1-4][0-9]|50)\b';
     const foundItem = this.model.productsAll.find((el) => el.id === Number(tempArr[1]));
-    const data = this.filterAndSortItems();
-
-    let display: IDisplay = this.model.filter.get('display') as IDisplay;
-    if (display !== 'list') display = 'tile';
-    const search = this.model.filter.getAll('search').join(',') || '';
-    const categoryAndBrand = [...this.model.filter.getAll('category'), ...this.model.filter.getAll('brand')] || [];
-    console.log(categoryAndBrand);
+    const filters = this.updateFilters(this.model.filter);
+    const data = this.filterAndSortItems(filters);
     if (path === '') {
       const productContainer = document.querySelector('.products__items');
       if (productContainer) {
-        this.view.item.draw(data, this.model.productsAll, display, search, categoryAndBrand);
+        this.view.item.draw(data, this.model.productsAll, filters);
       } else {
-        this.view.draw(data, this.model.productsAll, display, search, categoryAndBrand);
+        this.view.draw(data, this.model.productsAll, filters);
       }
     } else if (tempArr.length === 2 && foundItem) {
       this.productPage.draw(foundItem);
@@ -66,6 +65,7 @@ export default class AppController {
     } else {
       this.pageError.draw();
     }
+    this.tourchSliders = false;
   }
 
   addUserEvents() {
@@ -93,48 +93,73 @@ export default class AppController {
     const totalCart = document.querySelector('.header__cart--label') as Element;
     const storageCart = localStorage.getItem('shopping');
     if (storageCart) {
-      const cart: ICart[] = JSON.parse(storageCart);
-      const sum = cart.reduce((acc, el) => (acc += el.price * el.count), 0);
-      const totalItems = cart.reduce((acc, el) => (acc += el.count), 0);
+      this.cart = JSON.parse(storageCart);
+      const sum = this.cart.reduce((acc, el) => (acc += el.price * el.count), 0);
+      const totalItems = this.cart.reduce((acc, el) => (acc += el.count), 0);
       totalSum.textContent = `$ ${sum}.00`;
       totalCart.textContent = `${totalItems}`;
     }
   }
 
-  filterAndSortItems() {
+  filterAndSortItems(filters: IFilter) {
     let data = this.model.productsAll.slice();
-    const filters = this.model.filter;
     // console.log(data, 'start', filters.toString());
-    const price = filters.get('price');
-    if (price) {
-      const [min, max] = price.split('%').map(Number);
+    if (filters.price) {
+      const [min, max] = filters.price;
       data = this.model.filterByRange(data, 'price', min, max);
     }
-    const stock = filters.get('stock');
-    if (stock) {
-      const [min, max] = stock.split('%').map(Number);
+    if (filters.stock) {
+      const [min, max] = filters.stock;
       data = this.model.filterByRange(data, 'stock', min, max);
     }
-    const brand = filters.getAll('brand');
-    if (brand.length > 0) {
-      // console.log('brand');
-      // let tempData:
-      data = this.model.filterByField(data, 'brand', brand);
+    if (filters.brand && filters.brand.length > 0) {
+      data = this.model.filterByField(data, 'brand', filters.brand);
     }
-    const category = filters.getAll('category');
-    if (category.length > 0) {
+    if (filters.category && filters.category.length > 0) {
       // console.log(category);
-      data = this.model.filterByField(data, 'category', category);
+      data = this.model.filterByField(data, 'category', filters.category);
     }
-    const search = filters.getAll('search').join(',');
-    if (search) {
-      data = this.model.filterBySearch(data, search);
+    if (filters.search) {
+      data = this.model.filterBySearch(data, filters.search);
     }
-    const sort = filters.get('sort');
-    if (sort) {
-      data = this.model.sortItems(sort as SortParm, data);
+    if (filters.sort) {
+      data = this.model.sortItems(filters.sort as SortParm, data);
     }
     // console.log(data, 'end');
     return data;
+  }
+
+  updateFilters(modelFilter: URLSearchParams): IFilter {
+    const allId = this.cart.map((el) => el.id);
+    console.log(allId);
+    const filters: IFilter = {
+      display: 'tile',
+      sort: '',
+      category: [],
+      brand: [],
+      changePriceOrStock: this.tourchSliders,
+      cartIds: allId,
+    };
+    const price = modelFilter.get('price');
+    if (price) filters.price = price.split('%').map(Number);
+    const stock = modelFilter.get('stock');
+    if (stock) filters.stock = stock.split('%').map(Number);
+    const search = modelFilter.getAll('search').join(',');
+    if (search) filters.search = search;
+    const category = modelFilter.getAll('category');
+    if (category.length > 0) filters.category = category;
+    const brand = modelFilter.getAll('brand');
+    if (brand.length > 0) filters.brand = brand;
+    const display: IDisplay = modelFilter.get('display') as IDisplay;
+    filters.display = display !== 'list' ? 'tile' : 'list';
+    const sort = modelFilter.get('sort');
+    filters.sort = sort as SortParm;
+
+    console.log(filters);
+    return filters;
+  }
+  changeSliders() {
+    console.log('test');
+    this.tourchSliders = true;
   }
 }
