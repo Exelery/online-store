@@ -1,11 +1,14 @@
 import { IProductCount } from '../utils/types';
 import CartPagination from './components/cartPagination';
+import CartTotal from './components/cartTotal';
 
 export default class CartPage {
   cardPagination: CartPagination;
+  cartTotal: CartTotal;
 
   constructor() {
     this.cardPagination = new CartPagination();
+    this.cartTotal = new CartTotal();
   }
 
   addSection() {
@@ -30,5 +33,6 @@ export default class CartPage {
     // const cartInner = document.querySelector('.cart__inner') as HTMLElement;
     // cartInner.textContent = JSON.stringify(cartItems[0].brand);
     this.cardPagination.draw(cartItems);
+    this.cartTotal.draw(cartItems);
   }
 }

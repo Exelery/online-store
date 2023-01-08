@@ -32,11 +32,26 @@
     box-shadow: 0 1px 2px 1px rgb(0 0 0 / 16%);
   }
 
+  &__find {
+    font-weight: 500;
+    position: relative;
+  }
+
+  &__find::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 70%;
+    top: 0;
+    bottom: 0;
+    background-color: $white;
+    opacity: .5;
+  }
+
   &__select,
   &__select option {
     cursor: pointer;
   }
-
 
   &__view-mode {
     display: flex;
