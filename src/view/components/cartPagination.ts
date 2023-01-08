@@ -163,6 +163,19 @@ export default class CartPagination {
     if (totalProducts) {
       totalProducts.textContent = `${data.reduce((acc, el) => (acc += el.count), 0)}`;
     }
+    const price = document.getElementsByClassName('total__price');
+
+    if (price) {
+      const discounts = [1, 0.9, 0.8];
+
+      for (let i = 1; i < price.length; i++) {
+        if (price[i].textContent) {
+          price[i].textContent = `$ ${(
+            data.reduce((acc, val) => (acc += val.price * val.count), 0) * discounts[i]
+          ).toFixed(2)}`;
+        }
+      }
+    }
   }
 
   draw(cartItems: IProductCount[], cartLimit: number | undefined, cartPage: number | undefined) {

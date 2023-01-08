@@ -109,7 +109,6 @@ export default class CartTotal {
     if (price) {
       const lastPrice = price[price.length - 1];
       const clone = lastPrice.cloneNode(true);
-      console.log(lastPrice);
       if (clone.textContent) {
         const priceValue = clone.textContent.slice(clone.textContent.indexOf(' '));
         lastPrice.classList.add('old');
