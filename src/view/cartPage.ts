@@ -28,11 +28,12 @@ export default class CartPage {
     container.append(productInner);
   }
 
-  draw(cartItems: IProductCount[]) {
+  draw(cartItems: IProductCount[], cartLimit: number | undefined, cartPage: number | undefined) {
     this.addSection();
     // const cartInner = document.querySelector('.cart__inner') as HTMLElement;
     // cartInner.textContent = JSON.stringify(cartItems[0].brand);
-    this.cardPagination.draw(cartItems);
-    this.cartTotal.draw(cartItems);
+    this.cardPagination.draw(cartItems, cartLimit, cartPage);
+    // this.cartTotal.draw(cartItems);
+    // this.cardPagination.updateTotalValues(cartItems);
   }
 }

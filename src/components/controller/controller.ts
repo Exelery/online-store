@@ -6,6 +6,7 @@ import MainPageController from './mainPageController';
 import { SortParm, ICart, IDisplay, IProductCount, IFilter } from '../../utils/types';
 import ProductPage from '../../view/productPage';
 import CartPage from '../../view/cartPage';
+import CartPageController from './cartPageController';
 
 export default class AppController {
   view: MainPage;
@@ -14,6 +15,7 @@ export default class AppController {
   router: Router;
   model: Model;
   mainPageController: MainPageController;
+  cartPageController: CartPageController;
   pageError: PageError;
   tourchSliders: boolean;
   cart: ICart[];
@@ -25,11 +27,12 @@ export default class AppController {
     this.router = new Router(this);
     this.pageError = new PageError();
     this.mainPageController = new MainPageController(this);
+    this.cartPageController = new CartPageController(this);
     this.cart = [];
   }
 
   start() {
-    this.updateCart();
+    // this.updateCart();
     this.addUserEvents();
     this.tourchSliders = true;
   }
@@ -40,6 +43,7 @@ export default class AppController {
   }
 
   public async loadPage(path = '') {
+    this.updateCart();
     this.model.filter = new URLSearchParams(window.location.search);
     if (!this.model.productsAll) {
       await this.model.loadData();
@@ -59,9 +63,14 @@ export default class AppController {
     } else if (tempArr.length === 2 && foundItem) {
       this.productPage.draw(foundItem);
     } else if (path === 'cart') {
+      const cartlist = document.querySelector('.cart__inner');
+      const cartlistItems = cartlist?.querySelectorAll('li');
       const cartItems: IProductCount[] = this.model.findItemsFromCart(this.model.shoppingCart) as IProductCount[];
-      console.log('cart Open', cartItems);
-      this.cartPage.draw(cartItems);
+      if (cartlist && cartlistItems && cartlistItems.length > 1) {
+        this.cartPage.cardPagination.drawItemsList(cartItems);
+      } else {
+        this.cartPage.draw(cartItems, filters.cartLimit, filters.cartPage);
+      }
     } else {
       this.pageError.draw();
     }
@@ -70,6 +79,7 @@ export default class AppController {
 
   addUserEvents() {
     this.mainPageController.listen();
+    this.cartPageController.listen();
     const logo = document.querySelector('.header__title') as Element;
     const cart = document.querySelector('.header__cart') as Element;
 
@@ -103,7 +113,6 @@ export default class AppController {
 
   filterAndSortItems(filters: IFilter) {
     let data = this.model.productsAll.slice();
-    // console.log(data, 'start', filters.toString());
     if (filters.price) {
       const [min, max] = filters.price;
       data = this.model.filterByRange(data, 'price', min, max);
@@ -116,7 +125,6 @@ export default class AppController {
       data = this.model.filterByField(data, 'brand', filters.brand);
     }
     if (filters.category && filters.category.length > 0) {
-      // console.log(category);
       data = this.model.filterByField(data, 'category', filters.category);
     }
     if (filters.search) {
@@ -125,13 +133,11 @@ export default class AppController {
     if (filters.sort) {
       data = this.model.sortItems(filters.sort as SortParm, data);
     }
-    // console.log(data, 'end');
     return data;
   }
 
   updateFilters(modelFilter: URLSearchParams): IFilter {
     const allId = this.cart.map((el) => el.id);
-    console.log(allId);
     const filters: IFilter = {
       display: 'tile',
       sort: '',
@@ -154,12 +160,15 @@ export default class AppController {
     filters.display = display !== 'list' ? 'tile' : 'list';
     const sort = modelFilter.get('sort');
     filters.sort = sort as SortParm;
+    const cartLimit = modelFilter.get('limit');
+    if (cartLimit) filters.cartLimit = Number(cartLimit);
+    const cartPage = modelFilter.get('page');
+    if (cartPage) filters.cartPage = Number(cartPage);
 
-    console.log(filters);
     return filters;
   }
+
   changeSliders() {
-    console.log('test');
     this.tourchSliders = true;
   }
 }
