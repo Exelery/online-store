@@ -1,6 +1,13 @@
 import { IProductCount } from '../../utils/types';
+import CartItem from './cartItem';
 
 export default class CartPagination {
+  cartItem: CartItem;
+
+  constructor() {
+    this.cartItem = new CartItem();
+  }
+
   addStructure(cartItems: IProductCount[]) {
     const cartInner = document.querySelector('.cart__inner');
 
@@ -36,7 +43,7 @@ export default class CartPagination {
         cartLimitInput.type = 'number';
         cartLimitInput.min = '1';
         cartLimitInput.max = cartItems.length.toString();
-        cartLimitInput.value = cartLimitInput.max;
+        cartLimitInput.value = cartItems.length.toString();
         cartLimit.append(cartLimitInput);
 
         const cartPageNumbers = document.createElement('div');
@@ -51,7 +58,7 @@ export default class CartPagination {
 
         const currentPage = document.createElement('span');
         currentPage.classList.add('current-page');
-        currentPage.textContent = ' 1 ';
+        currentPage.textContent = '1';
         cartPageNumbers.append(currentPage);
 
         const btnRight = document.createElement('button');
@@ -60,13 +67,88 @@ export default class CartPagination {
         cartPageNumbers.append(btnRight);
 
         const cartList = document.createElement('ul');
-        cartList.classList.add('cart__list');
+        cartList.classList.add('cart__items', 'list');
         cartProducts.append(cartList);
+      }
+    }
+  }
+
+  drawItemsList(cartItems: IProductCount[]) {
+    const cartLimitInput = document.querySelector('.cart__limit-input') as HTMLInputElement;
+    const currentPage = document.querySelector('.current-page') as HTMLElement;
+    const cartList = document.querySelector('.cart__items');
+
+    if (cartList) cartList.innerHTML = '';
+
+    const itemsOnPage = +cartLimitInput.value;
+    const pageNumber = currentPage.textContent ? +currentPage.textContent : 1;
+
+    const maxIndex = itemsOnPage * pageNumber - 1;
+    const minIndex = (pageNumber - 1) * itemsOnPage;
+    const indexesToDraw: number[] = [];
+
+    for (let i = minIndex; i <= maxIndex; i++) {
+      indexesToDraw.push(i);
+    }
+
+    indexesToDraw.forEach((val) => {
+      if (cartItems[val]) this.cartItem.draw(cartItems[val], val + 1);
+    });
+  }
+
+  changePageLimit(data: IProductCount[]) {
+    const cartLimitInput = document.querySelector('.cart__limit-input') as HTMLInputElement;
+    const currentPageSpan = document.querySelector('.current-page');
+
+    if (currentPageSpan) {
+      cartLimitInput.addEventListener('input', () => {
+        if (+cartLimitInput.value !== 0 && +cartLimitInput.value <= +cartLimitInput.max) {
+          const currentPageNumber = currentPageSpan.textContent ? +currentPageSpan.textContent : 111;
+          const newMaxPage = Math.ceil(data.length / +cartLimitInput.value);
+          if (newMaxPage < currentPageNumber) {
+            currentPageSpan.textContent = `${newMaxPage}`;
+          }
+          this.drawItemsList(data);
+        }
+      });
+    }
+  }
+
+  changePage(data: IProductCount[]) {
+    const cartLimitInput = document.querySelector('.cart__limit-input');
+
+    if (cartLimitInput && cartLimitInput instanceof HTMLInputElement) {
+      const btnLeft = document.querySelector('.btn-left');
+      const btnRight = document.querySelector('.btn-right');
+      const currentPageSpan = document.querySelector('.current-page');
+
+      if (btnLeft && btnRight && currentPageSpan) {
+        btnLeft.addEventListener('click', () => {
+          let currentPage = currentPageSpan.textContent ? +currentPageSpan.textContent : 1;
+          if (currentPage > 1) {
+            currentPage--;
+            currentPageSpan.textContent = `${currentPage}`;
+            this.drawItemsList(data);
+          }
+        });
+
+        btnRight.addEventListener('click', () => {
+          let currentPage = currentPageSpan.textContent ? +currentPageSpan.textContent : 1;
+          const maxPage = data.length / +cartLimitInput.value;
+          if (currentPage < maxPage) {
+            currentPage++;
+            currentPageSpan.textContent = `${currentPage}`;
+            this.drawItemsList(data);
+          }
+        });
       }
     }
   }
 
   draw(cartItems: IProductCount[]) {
     this.addStructure(cartItems);
+    this.drawItemsList(cartItems);
+    this.changePageLimit(cartItems);
+    this.changePage(cartItems);
   }
 }
