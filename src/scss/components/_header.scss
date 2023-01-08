@@ -40,6 +40,19 @@
 
   &__cart {
     cursor: pointer;
+    transition: color .3s;
+  }
+
+  &__cart:hover {
+    color: $red;
+  }
+
+  &__cart:hover &__cart--label {
+    background-color: $red;
+  }
+
+  &__cart--label {
+    transition: background-color .3s;
   }
 
   &__total,
