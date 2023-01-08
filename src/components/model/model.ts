@@ -80,20 +80,33 @@ export default class Model {
     dispatchEvent(new Event('storage'));
   }
 
-  addItemToCart(id: string) {
+  changeItemToCart(id: string, type: 'plus' | 'minus') {
     const item: IProduct | undefined = this.productsAll.find((el) => el.id === Number(id));
     // console.log(this.shoppingCart, 'start');
     const indexInCart = this.shoppingCart.findIndex((el) => el.id === Number(id));
+    const itemInCart = this.shoppingCart.find((el) => el.id === Number(id));
     if (item) {
-      if (indexInCart > -1) {
-        // this.shoppingCart[id].count++;
-        this.shoppingCart.splice(indexInCart, 1); // temp
-      } else {
-        this.shoppingCart.push({
-          id: item.id,
-          count: 1,
-          price: item.price,
-        });
+      if (type === 'minus') {
+        if (indexInCart > -1 && itemInCart) {
+          itemInCart.count--;
+          if (itemInCart.count === 0) {
+            this.shoppingCart.splice(indexInCart, 1);
+          } else {
+            this.shoppingCart[indexInCart] = itemInCart;
+          }
+        }
+      }
+      if (type === 'plus') {
+        if (indexInCart > -1 && itemInCart) {
+          itemInCart.count++;
+          this.shoppingCart[indexInCart] = itemInCart;
+        } else {
+          this.shoppingCart.push({
+            id: item.id,
+            count: 1,
+            price: item.price,
+          });
+        }
       }
     }
     this.saveShoppingCart();

@@ -16,7 +16,7 @@ export default class CartTotal {
 
       const totalPrice = document.createElement('div');
       totalPrice.classList.add('total__price');
-      totalPrice.textContent = `$ ${data.reduce((acc, val) => (acc += val.price), 0)}`;
+      // totalPrice.textContent = `$ 0`;
       cartTotal.append(totalPrice);
 
       const totalCountText = document.createElement('div');

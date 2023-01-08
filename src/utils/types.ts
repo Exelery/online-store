@@ -44,6 +44,8 @@ export type IFilter = {
   sort: SortParm | string;
   changePriceOrStock?: boolean;
   cartIds: number[];
+  cartLimit?: number;
+  cartPage?: number;
 };
 
 export interface ICart {

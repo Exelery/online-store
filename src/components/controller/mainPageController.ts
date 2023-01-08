@@ -37,7 +37,8 @@ export default class MainPageController {
             if (item) {
               const id = item.getAttribute('data-id');
               if (addItem && id) {
-                this.model.addItemToCart(id);
+                const typeChange = addItem.textContent === 'Drop from cart' ? 'minus' : 'plus';
+                this.model.changeItemToCart(id, typeChange);
                 addItem.textContent = addItem.textContent === 'Drop from cart' ? 'Add to cart' : 'Drop from cart';
               } else {
                 this.controller.appRouter(e, `product/${id}`);
