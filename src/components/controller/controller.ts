@@ -25,6 +25,7 @@ export default class AppController {
     this.router = new Router(this);
     this.pageError = new PageError();
     this.mainPageController = new MainPageController(this);
+    this.cart = [];
   }
 
   start() {
