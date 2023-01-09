@@ -27,6 +27,7 @@ export default class MainPageController {
       const priceWrapper = document.querySelector('.filters__block.wrapper.price');
       const stockWrapper = document.querySelector('.filters__block.wrapper.stock');
       const productsViewMode = document.querySelector('.products__view-mode');
+      const copyBtn = document.querySelector('.filters__copy');
 
       if (productsContaner) {
         productsContaner.addEventListener('click', (e: Event) => {
@@ -123,6 +124,20 @@ export default class MainPageController {
               this.toggleDisplayClasses(listTarget, tile, 'list', e);
             }
           }
+        });
+      }
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          const url = window.location.href;
+          const originText = copyBtn.textContent;
+          console.log('copy', url);
+          navigator.clipboard.writeText(url).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.textContent = originText;
+            }, 500);
+          });
         });
       }
     });
