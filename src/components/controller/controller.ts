@@ -89,6 +89,8 @@ export default class AppController {
 
     logo.addEventListener('click', (e: Event) => {
       if (e.target instanceof HTMLElement) {
+        const productContainer = document.querySelector('.products__items');
+        productContainer?.parentElement?.removeChild(productContainer);
         this.appRouter(e, '/');
       }
     });

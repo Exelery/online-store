@@ -83,6 +83,8 @@ export default class MainPageController {
 
       if (resetBtn) {
         resetBtn.addEventListener('click', (e: Event) => {
+          const productContainer = document.querySelector('.products__items');
+          productContainer?.parentElement?.removeChild(productContainer);
           this.controller.appRouter(e, '/');
         });
       }
