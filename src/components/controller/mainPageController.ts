@@ -27,12 +27,13 @@ export default class MainPageController {
       const priceWrapper = document.querySelector('.filters__block.wrapper.price');
       const stockWrapper = document.querySelector('.filters__block.wrapper.stock');
       const productsViewMode = document.querySelector('.products__view-mode');
+      const copyBtn = document.querySelector('.filters__copy');
 
       if (productsContaner) {
         productsContaner.addEventListener('click', (e: Event) => {
           if (e.target instanceof HTMLElement) {
             const item = e.target.closest('.item');
-            console.log(item?.getAttribute('data-id'));
+            // console.log(item?.getAttribute('data-id'));
             const addItem = e.target.closest('.item__add');
             if (item) {
               const id = item.getAttribute('data-id');
@@ -82,6 +83,8 @@ export default class MainPageController {
 
       if (resetBtn) {
         resetBtn.addEventListener('click', (e: Event) => {
+          const productContainer = document.querySelector('.products__items');
+          productContainer?.parentElement?.removeChild(productContainer);
           this.controller.appRouter(e, '/');
         });
       }
@@ -123,6 +126,20 @@ export default class MainPageController {
               this.toggleDisplayClasses(listTarget, tile, 'list', e);
             }
           }
+        });
+      }
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          const url = window.location.href;
+          const originText = copyBtn.textContent;
+          console.log('copy', url);
+          navigator.clipboard.writeText(url).then(() => {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.textContent = originText;
+            }, 500);
+          });
         });
       }
     });

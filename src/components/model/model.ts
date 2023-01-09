@@ -98,8 +98,10 @@ export default class Model {
       }
       if (type === 'plus') {
         if (indexInCart > -1 && itemInCart) {
-          itemInCart.count++;
-          this.shoppingCart[indexInCart] = itemInCart;
+          if (item.stock > itemInCart.count) {
+            itemInCart.count++;
+            this.shoppingCart[indexInCart] = itemInCart;
+          }
         } else {
           this.shoppingCart.push({
             id: item.id,
