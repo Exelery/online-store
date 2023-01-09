@@ -1,11 +1,11 @@
 import Btn from './components/btn';
-import ConfirmInput from './components/confirmInput';
 import Input from './components/input';
+import Validation from './components/validation';
 
 export default class Modal {
-  confirmInput: ConfirmInput;
   input: Input;
   btn: Btn;
+  validation: Validation;
   private placeholders: string[] = ['name', 'phone', 'addres', 'e-mail'];
   private placeholdersCard: string[] = ['number', 'date', 'cvv'];
   private srcImg: string[][] = [
@@ -22,9 +22,9 @@ export default class Modal {
   ];
 
   constructor() {
-    this.confirmInput = new ConfirmInput();
     this.input = new Input();
     this.btn = new Btn();
+    this.validation = new Validation();
   }
 
   addStructure() {
@@ -67,8 +67,8 @@ export default class Modal {
   createPersonalInputs() {
     this.placeholders.forEach((val, i) => {
       const fragment = this.input.create(i !== this.placeholders.length - 1 ? 'text' : 'email', val);
-      const personalTitle = document.querySelector('.modal__title--personal');
-      if (personalTitle) personalTitle.after(fragment);
+      const personalTitle = document.querySelector('.modal__title--card');
+      if (personalTitle) personalTitle.before(fragment);
     });
   }
 
@@ -96,10 +96,60 @@ export default class Modal {
     }
   }
 
+  cardNumberOnlyDigits() {
+    const input = document.querySelector('.modal__input.number');
+
+    if (input && input instanceof HTMLInputElement) {
+      input.maxLength = 16;
+      input.addEventListener('input', () => {
+        if (isNaN(+input.value)) input.value = '';
+      });
+    }
+  }
+
+  cardDateOnlyDigits() {
+    const input = document.querySelector('.modal__input.date');
+
+    if (input && input instanceof HTMLInputElement) {
+      input.maxLength = 5;
+      input.addEventListener('input', () => {
+        if (isNaN(+input.value.replace('/', '0'))) input.value = '';
+        if (+input.value.slice(0, 2) > 12) input.value = '';
+        if (input.value.length === 2) input.value += '/';
+      });
+    }
+  }
+
+  cardCvvOnlyDigits() {
+    const input = document.querySelector('.modal__input.cvv');
+
+    if (input && input instanceof HTMLInputElement) {
+      input.maxLength = 3;
+      input.addEventListener('input', () => {
+        if (isNaN(+input.value)) input.value = '';
+      });
+    }
+  }
+
+  confirmValid() {
+    const btnConfirm = document.querySelector('.modal__confirm');
+
+    if (btnConfirm) {
+      btnConfirm.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.validation.validate();
+      });
+    }
+  }
+
   draw() {
     this.addStructure();
     this.createPersonalInputs();
     this.createCardInputs();
     this.closeModal();
+    this.confirmValid();
+    this.cardNumberOnlyDigits();
+    this.cardDateOnlyDigits();
+    this.cardCvvOnlyDigits();
   }
 }

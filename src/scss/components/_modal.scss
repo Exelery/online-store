@@ -37,6 +37,25 @@
     margin: 10px;
     text-align: center;
     width: 70%;
+    position: relative;
+  }
+
+  &__wrapper.err::after {
+    display: block;
+  }
+
+  &__wrapper.err > input {
+    border-color: $red;
+  }
+
+  &__wrapper::after {
+    content: 'ERR';
+    display: none;
+    position: absolute;
+    left: 5px;
+    top: 4px;
+    color: $red;
+    font-weight: 500;
   }
 
   &__input {
