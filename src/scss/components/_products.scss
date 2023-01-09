@@ -37,6 +37,17 @@
     position: relative;
   }
 
+  &__find.not-found::after {
+    content: 'Products not found';
+    position: absolute;
+    width: 250px;
+    height: 40px;
+    bottom: -20vh;
+    left: 0;
+    font-size: 28px;
+    font-weight: 500;
+  }
+
   &__find::before {
     content: '';
     position: absolute;

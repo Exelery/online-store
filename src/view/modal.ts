@@ -1,30 +1,39 @@
 import Btn from './components/btn';
-import ConfirmInput from './components/confirmInput';
 import Input from './components/input';
+import Validation from './components/validation';
 
 export default class Modal {
-  confirmInput: ConfirmInput;
   input: Input;
   btn: Btn;
+  validation: Validation;
   private placeholders: string[] = ['name', 'phone', 'addres', 'e-mail'];
   private placeholdersCard: string[] = ['number', 'date', 'cvv'];
-  private srcImg: string[][] = [
-    [
-      '',
-      'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71',
-    ],
-    [
-      '3',
-      'https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg',
-    ],
-    ['4', 'https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png'],
-    ['5', 'https://www.mastercard.hu/content/dam/public/mastercardcom/eu/hu/images/mc-logo-52.svg'],
+  private srcImg: string[] = [
+    'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71',
+
+    'https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg',
+
+    'https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png',
+
+    'https://www.mastercard.hu/content/dam/public/mastercardcom/eu/hu/images/mc-logo-52.svg',
   ];
+  // private srcImg: string[][] = [
+  //   [
+  //     '',
+  //     'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71',
+  //   ],
+  //   [
+  //     '3',
+  //     'https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg',
+  //   ],
+  //   ['4', 'https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png'],
+  //   ['5', 'https://www.mastercard.hu/content/dam/public/mastercardcom/eu/hu/images/mc-logo-52.svg'],
+  // ];
 
   constructor() {
-    this.confirmInput = new ConfirmInput();
     this.input = new Input();
     this.btn = new Btn();
+    this.validation = new Validation();
   }
 
   addStructure() {
@@ -67,8 +76,8 @@ export default class Modal {
   createPersonalInputs() {
     this.placeholders.forEach((val, i) => {
       const fragment = this.input.create(i !== this.placeholders.length - 1 ? 'text' : 'email', val);
-      const personalTitle = document.querySelector('.modal__title--personal');
-      if (personalTitle) personalTitle.after(fragment);
+      const personalTitle = document.querySelector('.modal__title--card');
+      if (personalTitle) personalTitle.before(fragment);
     });
   }
 
@@ -96,10 +105,82 @@ export default class Modal {
     }
   }
 
+  changeCardImg() {
+    const img = document.querySelector('.modal__img');
+    const input = document.querySelector('.modal__input.number');
+
+    if (img && img instanceof HTMLImageElement) {
+      if (input && input instanceof HTMLInputElement) {
+        input.addEventListener('input', () => {
+          if (input.value[0] === '3') {
+            img.src = this.srcImg[1];
+          } else if (input.value[0] === '4') {
+            img.src = this.srcImg[2];
+          } else if (input.value[0] === '5') {
+            img.src = this.srcImg[3];
+          } else {
+            img.src = this.srcImg[0];
+          }
+        });
+      }
+    }
+  }
+
+  cardNumberOnlyDigits() {
+    const input = document.querySelector('.modal__input.number');
+
+    if (input && input instanceof HTMLInputElement) {
+      input.maxLength = 16;
+      input.addEventListener('input', () => {
+        if (isNaN(+input.value)) input.value = '';
+      });
+    }
+  }
+
+  cardDateOnlyDigits() {
+    const input = document.querySelector('.modal__input.date');
+
+    if (input && input instanceof HTMLInputElement) {
+      input.maxLength = 5;
+      input.addEventListener('input', () => {
+        if (isNaN(+input.value.replace('/', '0'))) input.value = '';
+        if (+input.value.slice(0, 2) > 12) input.value = '';
+        if (input.value.length === 2) input.value += '/';
+      });
+    }
+  }
+
+  cardCvvOnlyDigits() {
+    const input = document.querySelector('.modal__input.cvv');
+
+    if (input && input instanceof HTMLInputElement) {
+      input.maxLength = 3;
+      input.addEventListener('input', () => {
+        if (isNaN(+input.value)) input.value = '';
+      });
+    }
+  }
+
+  confirmValid() {
+    const btnConfirm = document.querySelector('.modal__confirm');
+
+    if (btnConfirm) {
+      btnConfirm.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.validation.validate();
+      });
+    }
+  }
+
   draw() {
     this.addStructure();
     this.createPersonalInputs();
     this.createCardInputs();
     this.closeModal();
+    this.confirmValid();
+    this.cardNumberOnlyDigits();
+    this.cardDateOnlyDigits();
+    this.cardCvvOnlyDigits();
+    this.changeCardImg();
   }
 }
