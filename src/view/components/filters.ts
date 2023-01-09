@@ -127,6 +127,18 @@ export default class Filters {
     filtersBlock.append(filtersList);
   }
 
+  addProductNotFound(data: IProduct[]) {
+    const found = document.querySelector('.products__find');
+
+    if (found) {
+      if (data.length === 0) {
+        found.classList.add('not-found');
+      } else if (data.length > 0) {
+        found.classList.remove('not-found');
+      }
+    }
+  }
+
   draw(data: IProduct[], allData: IProduct[]) {
     //allData: IProduct[]
     this.addFiltersStructure();
