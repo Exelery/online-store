@@ -8,7 +8,7 @@ export default class ProductDetail {
     this.btn = new Btn();
   }
 
-  draw(data: IProduct) {
+  draw(data: IProduct, cartIds: number[]) {
     const productInner = document.querySelector('.product__inner');
 
     if (productInner !== null) {
@@ -83,8 +83,8 @@ export default class ProductDetail {
       productPrice.classList.add('product__price');
       productPrice.textContent = '$ ' + data.price.toString();
       productAdd.append(productPrice);
-
-      const productAddToCart = this.btn.draw('ADD TO CARD', 'product__add-to-cart');
+      const buttonText = cartIds.includes(data.id) ? 'DROP FROM CART' : 'ADD TO CARD';
+      const productAddToCart = this.btn.draw(buttonText, 'product__add-to-cart');
       productAdd.append(productAddToCart);
 
       const productBuyNow = this.btn.draw('BUY NOW', 'product__buy-now');

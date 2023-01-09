@@ -28,9 +28,10 @@ export default class ProductPage {
     container.append(productInner);
   }
 
-  draw(data: IProduct) {
+  draw(data: IProduct, cartIds: number[]) {
     this.addSection();
     this.breadCrumbs.draw(data);
-    this.productDetail.draw(data);
+    this.productDetail.draw(data, cartIds);
+    dispatchEvent(new Event('drawProductPage'));
   }
 }

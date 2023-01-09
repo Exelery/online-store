@@ -27,9 +27,9 @@ export default class CartPageController {
               const id = item.getAttribute('data-id');
               const minus = e.target.closest('.item__dec');
               const plus = e.target.closest('.item__inc');
+              // const stock = item.querySelector('.item__stock span');
               if (id && (plus || minus)) {
                 if (plus) {
-                  console.log('plus');
                   this.model.changeItemToCart(id, 'plus');
                 }
                 if (minus) {

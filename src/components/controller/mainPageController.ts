@@ -32,7 +32,7 @@ export default class MainPageController {
         productsContaner.addEventListener('click', (e: Event) => {
           if (e.target instanceof HTMLElement) {
             const item = e.target.closest('.item');
-            console.log(item?.getAttribute('data-id'));
+            // console.log(item?.getAttribute('data-id'));
             const addItem = e.target.closest('.item__add');
             if (item) {
               const id = item.getAttribute('data-id');

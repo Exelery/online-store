@@ -7,6 +7,7 @@ import { SortParm, ICart, IDisplay, IProductCount, IFilter } from '../../utils/t
 import ProductPage from '../../view/productPage';
 import CartPage from '../../view/cartPage';
 import CartPageController from './cartPageController';
+import ProductPageController from './productPageController';
 
 export default class AppController {
   view: MainPage;
@@ -16,6 +17,7 @@ export default class AppController {
   model: Model;
   mainPageController: MainPageController;
   cartPageController: CartPageController;
+  productPageController: ProductPageController;
   pageError: PageError;
   tourchSliders: boolean;
   cart: ICart[];
@@ -28,6 +30,7 @@ export default class AppController {
     this.pageError = new PageError();
     this.mainPageController = new MainPageController(this);
     this.cartPageController = new CartPageController(this);
+    this.productPageController = new ProductPageController(this);
     this.cart = [];
   }
 
@@ -60,8 +63,8 @@ export default class AppController {
       } else {
         this.view.draw(data, this.model.productsAll, filters);
       }
-    } else if (tempArr.length === 2 && foundItem) {
-      this.productPage.draw(foundItem);
+    } else if (tempArr.length === 2 && tempArr[0] === 'product' && foundItem) {
+      this.productPage.draw(foundItem, filters.cartIds);
     } else if (path === 'cart') {
       const cartlist = document.querySelector('.cart__inner');
       const cartlistItems = cartlist?.querySelectorAll('li');
@@ -80,6 +83,7 @@ export default class AppController {
   addUserEvents() {
     this.mainPageController.listen();
     this.cartPageController.listen();
+    this.productPageController.listen();
     const logo = document.querySelector('.header__title') as Element;
     const cart = document.querySelector('.header__cart') as Element;
 
