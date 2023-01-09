@@ -1,14 +1,17 @@
 import { IProductCount } from '../utils/types';
 import CartPagination from './components/cartPagination';
 import CartTotal from './components/cartTotal';
+import Modal from './modal';
 
 export default class CartPage {
   cardPagination: CartPagination;
   cartTotal: CartTotal;
+  modal: Modal;
 
   constructor() {
     this.cardPagination = new CartPagination();
     this.cartTotal = new CartTotal();
+    this.modal = new Modal();
   }
 
   addSection() {
@@ -28,6 +31,16 @@ export default class CartPage {
     container.append(productInner);
   }
 
+  openModal() {
+    const checkoutBtn = document.querySelector('.total__checkout');
+
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', () => {
+        this.modal.draw();
+      });
+    }
+  }
+
   draw(cartItems: IProductCount[], cartLimit: number | undefined, cartPage: number | undefined) {
     this.addSection();
     // const cartInner = document.querySelector('.cart__inner') as HTMLElement;
@@ -35,5 +48,6 @@ export default class CartPage {
     this.cardPagination.draw(cartItems, cartLimit, cartPage);
     // this.cartTotal.draw(cartItems);
     // this.cardPagination.updateTotalValues(cartItems);
+    this.openModal();
   }
 }

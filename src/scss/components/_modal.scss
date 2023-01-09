@@ -1,0 +1,78 @@
+.modal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+  z-index: 10;
+
+  &__form {
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 700px;
+    width: 70%;
+    z-index: 11;
+    background-color: $white-bg;
+    border-radius: 8px;
+    border: 2px solid $blue;
+    cursor: auto;
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+  }
+
+  &__wrapper {
+    margin: 10px;
+    text-align: center;
+    width: 70%;
+  }
+
+  &__input {
+    width: 100%;
+    text-align: center;
+  }
+
+  &__card-data {
+    width: 50%;
+    padding-top: 5%;
+    margin-bottom: 20px;
+    position: relative;
+    background-color: #ccc;
+    display: flex;
+    justify-content: flex-end;    
+    flex-wrap: wrap;
+    border-radius: 8px;
+  }
+
+  &__img {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 12%;
+    border-radius: 5px;
+  }
+
+  &__wrapper:nth-last-child(1),
+  &__wrapper:nth-last-child(2) {
+    width: 32%;
+    margin-bottom: 10%;
+  }
+
+  &__confirm {
+    margin-bottom: 10px;
+    padding: 5px 20px;
+    font-size: 20px;
+  }
+}
