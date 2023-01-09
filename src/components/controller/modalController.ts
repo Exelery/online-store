@@ -20,6 +20,7 @@ export default class ModalController {
             confirmBtn.textContent = 'Congratulations! You did it!!';
             setTimeout(() => {
               this.controller.updateCart();
+              this.controller.model.shoppingCart = [];
               this.controller.appRouter(e, '/');
             }, 3000);
           }

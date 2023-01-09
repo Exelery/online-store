@@ -2,6 +2,7 @@
 import Model from '../components/model/model';
 import { ApiLoader } from '../loader/loader';
 import { IData } from '../utils/types';
+import
 // import fetch, { Response } from 'node-fetch';
 
 interface IJsonResponse {
