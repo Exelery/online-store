@@ -56,20 +56,56 @@ export default class CartTotal {
           (input.value === 'RSS' && !input.classList.contains('RSS')) ||
           (input.value === 'EPM' && !input.classList.contains('EPM'))
         ) {
-          const totalPromo = document.createElement('div');
-          totalPromo.classList.add('total__promo');
-          totalPromo.textContent = `"${input.value}" - 10% discount`;
-          input.after(totalPromo);
+          // const totalPromo = document.createElement('div');
+          // totalPromo.classList.add('total__promo');
+          // totalPromo.textContent = `"${input.value}" - 10% discount`;
+          // input.after(totalPromo);
 
-          const totalApplyPromo = document.createElement('button');
-          totalApplyPromo.classList.add('total__add-promo', 'apply', 'btn');
-          totalApplyPromo.textContent = 'APPLY';
-          totalPromo.append(totalApplyPromo);
+          // const totalApplyPromo = document.createElement('button');
+          // totalApplyPromo.classList.add('total__add-promo', 'apply', 'btn');
+          // totalApplyPromo.textContent = 'APPLY';
+          // totalPromo.append(totalApplyPromo);
+          this.createPromo(input.value);
         } else if (input.nextElementSibling?.classList.contains('total__promo')) {
           input.nextElementSibling.remove();
         }
       });
     }
+  }
+
+  createPromo(name: string) {
+    const input = document.querySelector('.total__input') as Element;
+    const totalPromo = document.createElement('div') as HTMLElement;
+    totalPromo.classList.add('total__promo');
+    totalPromo.textContent = `"${name}" - 10% discount`;
+
+    input.after(totalPromo);
+
+    const totalApplyPromo = document.createElement('button');
+    totalApplyPromo.classList.add('total__add-promo', 'apply', 'btn');
+    totalApplyPromo.textContent = 'APPLY';
+    totalPromo.append(totalApplyPromo);
+    return { currentPromo: totalPromo, value: name };
+  }
+
+  savePromoToLocalStorage(promo: { name: string }, type: 'add' | 'remove') {
+    const items = this.loadPromoLocalStorage();
+    if (type === 'add') {
+      items.push(promo);
+    } else {
+      const indexItem = items.findIndex(({ name }) => name === promo.name);
+      items.splice(indexItem, 1);
+    }
+
+    localStorage.setItem('promo', JSON.stringify(items));
+  }
+
+  loadPromoLocalStorage(): { name: string }[] {
+    const localPromo = localStorage.getItem('promo');
+    if (localPromo) {
+      return JSON.parse(localPromo);
+    }
+    return [];
   }
 
   addRemovePromo() {
@@ -81,25 +117,51 @@ export default class CartTotal {
         if (e.target && e.target instanceof HTMLButtonElement) {
           if (e.target.classList.contains('apply')) {
             const currentPromo = e.target.parentElement;
-            const clone = currentPromo?.cloneNode(true);
-            if (clone && clone.lastChild && clone.lastChild instanceof HTMLButtonElement) {
-              clone.lastChild.classList.remove('apply');
-              clone.lastChild.classList.add('drop');
-              clone.lastChild.textContent = 'DROP';
-              currentPromo?.remove();
-              input.classList.add(input.value);
+            // const clone = currentPromo?.cloneNode(true);
+            // if (clone && clone.lastChild && clone.lastChild instanceof HTMLButtonElement) {
+            //   clone.lastChild.classList.remove('apply');
+            //   clone.lastChild.classList.add('drop');
+            //   clone.lastChild.textContent = 'DROP';
+            //   currentPromo?.remove();
+            //   input.classList.add(input.value);
+            //   input.value = '';
+            //   input.before(clone);
+            //   this.addNewPrice();
+            // }
+            if (currentPromo) {
+              this.addActivePromo({ currentPromo, value: input.value });
+              this.savePromoToLocalStorage({ name: input.value }, 'add');
               input.value = '';
-              input.before(clone);
-              this.addNewPrice();
             }
           } else if (e.target.classList.contains('drop')) {
             const classToRemove = e.target.previousSibling?.textContent?.slice(1, 4);
             if (classToRemove) input.classList.remove(classToRemove);
-            e.target.parentElement?.remove();
-            this.removePrice();
+            if (e.target.parentElement) {
+              const type = e.target.parentElement.getAttribute('type');
+              e.target.parentElement?.remove();
+              if (type) {
+                this.savePromoToLocalStorage({ name: type }, 'remove');
+              }
+              this.removePrice();
+            }
           }
         }
       });
+    }
+  }
+
+  addActivePromo(props: { currentPromo: HTMLElement; value: string }) {
+    const input = document.querySelector('.total__input') as Element;
+    const clone = props.currentPromo?.cloneNode(true) as Element;
+    if (clone && clone.lastChild && clone.lastChild instanceof HTMLButtonElement) {
+      clone.lastChild.classList.remove('apply');
+      clone.lastChild.classList.add('drop');
+      clone.lastChild.textContent = 'DROP';
+      clone.setAttribute('type', props.value);
+      props.currentPromo?.remove();
+      input.classList.add(props.value);
+      input.before(clone);
+      this.addNewPrice();
     }
   }
 

@@ -7,6 +7,7 @@ export default class CartPageController {
   controller: AppController;
   model: Model;
   cartPage: CartPage;
+  promos: { name?: string }[];
   constructor(controller: AppController) {
     this.controller = controller;
     this.model = controller.model;
@@ -15,6 +16,7 @@ export default class CartPageController {
 
   public listen() {
     window.addEventListener('drawCartPage', () => {
+      this.updatePromos();
       const cartList = document.querySelector('.cart__items');
       const cartLimit = document.querySelector('.cart__limit-input');
       const pageNumber = document.querySelector('.cart__page-numbers');
@@ -66,4 +68,24 @@ export default class CartPageController {
       }
     });
   }
+
+  updatePromos() {
+    this.promos = this.cartPage.cartTotal.loadPromoLocalStorage();
+    if (this.promos.length > 0) {
+      this.promos.forEach((el) => {
+        if (el.name) {
+          const answer = this.cartPage.cartTotal.createPromo(el.name);
+          this.cartPage.cartTotal.addActivePromo(answer);
+        }
+      });
+    }
+  }
+
+  // loadPromoLocalStorage(): { name: string }[] {
+  //   const localPromo = localStorage.getItem('promo');
+  //   if (localPromo) {
+  //     return JSON.parse(localPromo);
+  //   }
+  //   return [];
+  // }
 }
