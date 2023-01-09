@@ -182,5 +182,6 @@ export default class Modal {
     this.cardDateOnlyDigits();
     this.cardCvvOnlyDigits();
     this.changeCardImg();
+    dispatchEvent(new Event('drawModal'));
   }
 }

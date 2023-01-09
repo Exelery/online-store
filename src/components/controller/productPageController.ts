@@ -26,8 +26,11 @@ export default class ProductPageController {
         });
       }
       if (buyNowButton) {
-        buyNowButton.addEventListener('click', () => {
+        buyNowButton.addEventListener('click', (e) => {
           console.log('do something');
+          this.model.changeItemToCart(pathId, 'plus');
+          this.controller.appRouter(e, '/cart');
+          this.cartPage.modal.draw();
         });
       }
     });

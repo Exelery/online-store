@@ -8,6 +8,7 @@ import ProductPage from '../../view/productPage';
 import CartPage from '../../view/cartPage';
 import CartPageController from './cartPageController';
 import ProductPageController from './productPageController';
+import ModalController from './modalController';
 
 export default class AppController {
   view: MainPage;
@@ -21,6 +22,8 @@ export default class AppController {
   pageError: PageError;
   tourchSliders: boolean;
   cart: ICart[];
+  modalController: ModalController;
+
   constructor() {
     this.view = new MainPage();
     this.productPage = new ProductPage();
@@ -31,6 +34,7 @@ export default class AppController {
     this.mainPageController = new MainPageController(this);
     this.cartPageController = new CartPageController(this);
     this.productPageController = new ProductPageController(this);
+    this.modalController = new ModalController(this);
     this.cart = [];
   }
 
@@ -84,6 +88,7 @@ export default class AppController {
     this.mainPageController.listen();
     this.cartPageController.listen();
     this.productPageController.listen();
+    this.modalController.listen();
     const logo = document.querySelector('.header__title') as Element;
     const cart = document.querySelector('.header__cart') as Element;
 
@@ -108,12 +113,17 @@ export default class AppController {
     const totalSum = document.querySelector('.header__total--label') as Element;
     const totalCart = document.querySelector('.header__cart--label') as Element;
     const storageCart = localStorage.getItem('shopping');
+    console.log(storageCart);
     if (storageCart) {
       this.cart = JSON.parse(storageCart);
       const sum = this.cart.reduce((acc, el) => (acc += el.price * el.count), 0);
       const totalItems = this.cart.reduce((acc, el) => (acc += el.count), 0);
       totalSum.textContent = `$ ${sum}.00`;
       totalCart.textContent = `${totalItems}`;
+    } else {
+      totalSum.textContent = `$ 0.00`;
+      totalCart.textContent = `0`;
+      this.cart = [];
     }
   }
 
