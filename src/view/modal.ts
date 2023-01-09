@@ -1,12 +1,18 @@
+import Btn from './components/btn';
 import ConfirmInput from './components/confirmInput';
 import Input from './components/input';
 
 export default class Modal {
   confirmInput: ConfirmInput;
   input: Input;
+  btn: Btn;
   private placeholders: string[] = ['name', 'phone', 'addres', 'e-mail'];
   private placeholdersCard: string[] = ['number', 'date', 'cvv'];
   private srcImg: string[][] = [
+    [
+      '',
+      'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71',
+    ],
     [
       '3',
       'https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg',
@@ -18,6 +24,7 @@ export default class Modal {
   constructor() {
     this.confirmInput = new ConfirmInput();
     this.input = new Input();
+    this.btn = new Btn();
   }
 
   addStructure() {
@@ -52,6 +59,8 @@ export default class Modal {
       modalImg.src =
         'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71';
       modalCardData.append(modalImg);
+
+      modalForm.append(this.btn.draw('CONFIRM', 'modal__confirm'));
     }
   }
 
@@ -74,9 +83,23 @@ export default class Modal {
     }
   }
 
+  closeModal() {
+    const modal = document.querySelector('.modal');
+    const main = document.querySelector('.main');
+
+    if (modal && main) {
+      modal.addEventListener('click', (e) => {
+        if (e.target && e.target instanceof HTMLElement && e.target.classList.contains('modal')) {
+          e.target.remove();
+        }
+      });
+    }
+  }
+
   draw() {
     this.addStructure();
     this.createPersonalInputs();
     this.createCardInputs();
+    this.closeModal();
   }
 }

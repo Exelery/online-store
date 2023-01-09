@@ -8,6 +8,7 @@
   flex-direction: column;
   justify-content: center;
   background: rgba(0, 0, 0, 0.9);
+  cursor: pointer;
   z-index: 10;
 
   &__form {
@@ -22,6 +23,7 @@
     background-color: $white-bg;
     border-radius: 8px;
     border: 2px solid $blue;
+    cursor: auto;
   }
 
   &__title {
@@ -40,5 +42,37 @@
   &__input {
     width: 100%;
     text-align: center;
+  }
+
+  &__card-data {
+    width: 50%;
+    padding-top: 5%;
+    margin-bottom: 20px;
+    position: relative;
+    background-color: #ccc;
+    display: flex;
+    justify-content: flex-end;    
+    flex-wrap: wrap;
+    border-radius: 8px;
+  }
+
+  &__img {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 12%;
+    border-radius: 5px;
+  }
+
+  &__wrapper:nth-last-child(1),
+  &__wrapper:nth-last-child(2) {
+    width: 32%;
+    margin-bottom: 10%;
+  }
+
+  &__confirm {
+    margin-bottom: 10px;
+    padding: 5px 20px;
+    font-size: 20px;
   }
 }

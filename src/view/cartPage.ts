@@ -37,7 +37,6 @@ export default class CartPage {
     if (checkoutBtn) {
       checkoutBtn.addEventListener('click', () => {
         this.modal.draw();
-        console.log('open!!!');
       });
     }
   }
