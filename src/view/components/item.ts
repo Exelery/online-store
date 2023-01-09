@@ -97,6 +97,7 @@ export default class Item {
     const countLabel = document.querySelector('.products__find');
 
     if (countLabel !== null) countLabel.textContent = `Found: ${data.length}`;
+    this.filters.addProductNotFound(data);
   }
 
   changeDisplayMode(display: IDisplay) {
