@@ -146,6 +146,7 @@ export default class Modal {
         if (isNaN(+input.value.replace('/', '0'))) input.value = '';
         if (+input.value.slice(0, 2) > 12) input.value = '';
         if (input.value.length === 2) input.value += '/';
+        if (input.value.length === 5 && +input.value.slice(3) < 23) input.value = '';
       });
     }
   }
