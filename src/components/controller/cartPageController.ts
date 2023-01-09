@@ -80,12 +80,4 @@ export default class CartPageController {
       });
     }
   }
-
-  // loadPromoLocalStorage(): { name: string }[] {
-  //   const localPromo = localStorage.getItem('promo');
-  //   if (localPromo) {
-  //     return JSON.parse(localPromo);
-  //   }
-  //   return [];
-  // }
 }

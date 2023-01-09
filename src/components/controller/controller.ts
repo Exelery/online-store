@@ -3,7 +3,7 @@ import MainPage from '../../view/mainPage';
 import Model from '../model/model';
 import PageError from '../../view/404/404';
 import MainPageController from './mainPageController';
-import { SortParm, ICart, IDisplay, IProductCount, IFilter } from '../../utils/types';
+import { SortParm, ICart, IDisplay, IProductCount, IFilter, IProduct } from '../../utils/types';
 import ProductPage from '../../view/productPage';
 import CartPage from '../../view/cartPage';
 import CartPageController from './cartPageController';
@@ -55,7 +55,7 @@ export default class AppController {
     // const regex = 'product/\b([1-9]|[1-4][0-9]|50)\b';
     const foundItem = this.model.productsAll.find((el) => el.id === Number(tempArr[1]));
     const filters = this.updateFilters(this.model.filter);
-    const data = this.filterAndSortItems(filters);
+    const data = this.filterAndSortItems(filters, this.model.productsAll);
     if (path === '') {
       const productContainer = document.querySelector('.products__items');
       if (productContainer) {
@@ -117,8 +117,8 @@ export default class AppController {
     }
   }
 
-  filterAndSortItems(filters: IFilter) {
-    let data = this.model.productsAll.slice();
+  filterAndSortItems(filters: IFilter, data: IProduct[]) {
+    data = data.slice();
     if (filters.price) {
       const [min, max] = filters.price;
       data = this.model.filterByRange(data, 'price', min, max);

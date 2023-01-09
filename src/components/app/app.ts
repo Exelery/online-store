@@ -1,6 +1,6 @@
 import AppController from '../controller/controller';
 export default class App {
-  private controller: AppController;
+  controller: AppController;
 
   constructor() {
     this.controller = new AppController();
