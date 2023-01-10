@@ -1,3 +1,5 @@
+import { IFilter } from '../utils/types';
+
 export const product1 = {
   id: 1,
   title: 'iPhone 9',
@@ -49,3 +51,14 @@ export const product3 = {
   thumbnail: 'https://i.dummyjson.com/data/products/3/thumbnail.jpg',
   images: ['https://i.dummyjson.com/data/products/3/1.jpg'],
 };
+
+export const filters: IFilter = {
+  display: 'tile',
+  sort: '',
+  category: [],
+  brand: [],
+  changePriceOrStock: false,
+  cartIds: [],
+};
+
+export const productsData = [product1, product2, product3];

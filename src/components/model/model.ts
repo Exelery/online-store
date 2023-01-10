@@ -11,11 +11,12 @@ export default class Model {
     // console.log('filter', this.filter.entries());
     // console.log('filter', this.filter.getAll('brand'));
     this.apiLoader = new ApiLoader();
+    this.shoppingCart = [];
     // this.loadData();
-    this.shoppingCart = this.getShoppingCart() || [];
   }
 
   async loadData() {
+    this.shoppingCart = this.getShoppingCart();
     const json: IData = await this.apiLoader.api();
     // console.log(Object.entries(json.products));
     this.productsAll = json.products;

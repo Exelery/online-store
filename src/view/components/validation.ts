@@ -4,11 +4,7 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('[a-zA-Z]{4,99} [a-zA-Z]{4,99}');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
   }
 
@@ -17,11 +13,7 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('[+][0-9]{11,99}');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
   }
 
@@ -30,11 +22,7 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('(?:[A-Za-z]+ ){2}[A-Za-z]+');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
   }
 
@@ -43,11 +31,7 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('^[A-Za-z0-9+_.-]+@(.+)$');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
   }
 
@@ -56,11 +40,7 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('[0-9]{16,16}');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
   }
 
@@ -69,11 +49,7 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('[0-9]/[0-9]');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
   }
 
@@ -82,12 +58,20 @@ export default class Validation {
 
     if (input && input instanceof HTMLInputElement) {
       const pattern = new RegExp('[0-9]{3}');
-      if (!pattern.test(input.value)) {
-        this.addErr(input);
-      } else {
-        this.removeErr(input);
-      }
+      this.changeErrorStatus(input, pattern);
     }
+  }
+
+  changeErrorStatus(input: HTMLInputElement, pattern: RegExp) {
+    if (this.validPattern(input.value, pattern)) {
+      this.removeErr(input);
+    } else {
+      this.addErr(input);
+    }
+  }
+
+  validPattern(value: string, pattern: RegExp) {
+    return pattern.test(value);
   }
 
   addErr(element: HTMLInputElement) {

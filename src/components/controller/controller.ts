@@ -110,20 +110,21 @@ export default class AppController {
   }
 
   updateCart() {
-    const totalSum = document.querySelector('.header__total--label') as Element;
-    const totalCart = document.querySelector('.header__cart--label') as Element;
+    const totalSum = document.querySelector('.header__total--label');
+    const totalCart = document.querySelector('.header__cart--label');
     const storageCart = localStorage.getItem('shopping');
-    console.log(storageCart);
-    if (storageCart) {
-      this.cart = JSON.parse(storageCart);
-      const sum = this.cart.reduce((acc, el) => (acc += el.price * el.count), 0);
-      const totalItems = this.cart.reduce((acc, el) => (acc += el.count), 0);
-      totalSum.textContent = `$ ${sum}.00`;
-      totalCart.textContent = `${totalItems}`;
-    } else {
-      totalSum.textContent = `$ 0.00`;
-      totalCart.textContent = `0`;
-      this.cart = [];
+    if (totalSum && totalCart) {
+      if (storageCart) {
+        this.cart = JSON.parse(storageCart);
+        const sum = this.cart.reduce((acc, el) => (acc += el.price * el.count), 0);
+        const totalItems = this.cart.reduce((acc, el) => (acc += el.count), 0);
+        totalSum.textContent = `$ ${sum}.00`;
+        totalCart.textContent = `${totalItems}`;
+      } else {
+        totalSum.textContent = `$ 0.00`;
+        totalCart.textContent = `0`;
+        this.cart = [];
+      }
     }
   }
 
