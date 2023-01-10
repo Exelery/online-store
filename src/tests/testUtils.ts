@@ -1,4 +1,4 @@
-import { IFilter } from '../utils/types';
+import { IFilter, ICart } from '../utils/types';
 
 export const product1 = {
   id: 1,
@@ -61,4 +61,17 @@ export const filters: IFilter = {
   cartIds: [],
 };
 
+export const cart3: ICart = {
+  price: 1249,
+  id: 3,
+  count: 1,
+};
+
+export const cart2: ICart = {
+  price: 899,
+  id: 2,
+  count: 2,
+};
+
+export const cartItems: ICart[] = [cart2, cart3];
 export const productsData = [product1, product2, product3];

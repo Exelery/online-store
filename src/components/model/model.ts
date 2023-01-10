@@ -8,16 +8,13 @@ export default class Model {
   // filters: IFilter;
   filter: URLSearchParams;
   constructor() {
-    // console.log('filter', this.filter.entries());
-    // console.log('filter', this.filter.getAll('brand'));
     this.apiLoader = new ApiLoader();
     this.shoppingCart = [];
-    // this.loadData();
   }
 
   async loadData() {
     this.shoppingCart = this.getShoppingCart();
-    const json: IData = await this.apiLoader.api();
+    const json: IData = await this.apiLoader.api<IData>();
     // console.log(Object.entries(json.products));
     this.productsAll = json.products;
   }
@@ -70,7 +67,6 @@ export default class Model {
 
   getShoppingCart() {
     const storage: string | null = localStorage.getItem('shopping');
-    console.log(storage);
     if (storage) {
       return JSON.parse(storage);
     }
