@@ -1,0 +1,77 @@
+.header {
+
+  background-color: $blue;
+  color: $white;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 7vh;
+  }
+
+  &__title {
+    @extend %roboto-700;
+    padding: 0 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .7s;
+  }
+
+  &__title:hover {
+    background-color: $red;
+    transition: background-color .7s;
+  }
+
+  &__title:hover span {
+    background-color: $blue;
+  }
+
+  &__title span {
+    display: inline-block;
+    width: 21px;
+    height: 25px;
+    margin: 0 3px;
+    background-color: $red;
+    border: 5px solid $white;
+    border-radius: 46%;
+    transition: background-color .7s;
+  }
+
+  &__cart {
+    cursor: pointer;
+    transition: color .3s;
+  }
+
+  &__cart:hover {
+    color: $red;
+  }
+
+  &__cart:hover &__cart--label {
+    background-color: $red;
+  }
+
+  &__cart--label {
+    transition: background-color .3s;
+  }
+
+  &__total,
+  &__cart {
+    @extend %roboto-500;
+    font-size: 20px;
+    text-decoration: underline;
+    text-decoration-color: $red;
+    text-decoration-thickness: 3px;
+  }
+
+  &__total--label,
+  &__cart--label {
+    @extend %roboto-700;
+    font-size: 24px;
+    display: inline-block;
+    padding: 0 5px;
+    color: $white;
+    border: 3px solid $red;
+    border-radius: 9px;
+  }
+}

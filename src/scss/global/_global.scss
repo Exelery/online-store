@@ -1,0 +1,46 @@
+// html {
+//   scroll-behavior: smooth;
+// }
+
+body {
+  @extend %roboto-400;
+  font-size: 16px;
+  line-height: 1.4;
+  background-color: $white-bg;
+}
+
+.body.menu-active {
+  overflow: hidden;
+}
+
+.main {
+  min-height: 86vh;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.wrapper {
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+
+  @include r(1280) {
+    padding: 0 30px;
+  }
+
+  @include r(768) {
+    padding: 0 20px;
+  }
+
+  @include r(640) {
+    padding: 0 10px;
+  }
+}

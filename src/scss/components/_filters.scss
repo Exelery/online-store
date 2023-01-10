@@ -1,0 +1,68 @@
+.filters {
+  padding: 10px 5px 0;
+  border: 2px solid $blue;
+  border-radius: 8px;
+  background-color: $white;
+  height: fit-content;
+
+  &__control {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 0 10px;
+  }
+
+  &__block {
+    width: 100%;
+    padding: 5px;
+    background-color: #ccc;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+
+  &__name {
+    text-align: center;
+    border-bottom: 1px solid $grey;
+  }
+
+  &__list {
+    max-height: 9.5vh;
+    overflow-y: scroll;
+    border-color: $grey;
+    border-style: solid;
+    border-width: 0 0 1px;
+  }
+
+  &__item {
+    display: flex;
+  }
+
+  &__item > input {
+    cursor: pointer;
+  }
+
+  &__item span {
+    display: inline-block;
+    margin-left: auto;
+    padding-right: 5px;
+  }
+
+  &__range {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  &__range::before {
+    content: '⟷';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 45%;
+    top: 20%;
+  }
+
+  &__dual-range {
+    display: flex;
+  }
+}

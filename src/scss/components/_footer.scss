@@ -1,0 +1,48 @@
+.footer {
+
+  background-color: $blue;
+  color: $white;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 7vh;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    @extend %roboto-400;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: background-color .5s;
+  }
+
+  &__link:hover {
+    background-color: $red;
+  }
+
+  &__link:hover .footer__git {
+    background-color: $blue;
+  }
+
+  &__link.school {
+    padding: 0 5px;
+    background-repeat: no-repeat;
+    background-size: 90%;
+    background-position: center center;
+    width: 100px;
+    height: 52px;
+  }
+
+  &__git {
+    margin-right: 5px;
+    border-radius: 50%;
+    transition: background-color .5s;
+  }
+
+  &__year {
+    @extend %roboto-700;
+  }
+}
