@@ -5,7 +5,6 @@ export default class Model {
   private apiLoader: ApiLoader;
   productsAll: IProduct[];
   public shoppingCart: ICart[];
-  // filters: IFilter;
   filter: URLSearchParams;
   constructor() {
     this.apiLoader = new ApiLoader();
@@ -15,17 +14,14 @@ export default class Model {
   async loadData() {
     this.shoppingCart = this.getShoppingCart();
     const json: IData = await this.apiLoader.api<IData>();
-    // console.log(Object.entries(json.products));
     this.productsAll = json.products;
   }
 
   public filterByRange(data: IProduct[], field: 'price' | 'stock', minValue: number, maxValue: number): IProduct[] {
-    // this.filter.set(field, `${minValue}%${maxValue}`);
     return data.filter((item) => item[field] >= minValue && item[field] <= maxValue);
   }
 
   public filterByField(data: IProduct[], field: 'category' | 'brand', value: string[]): IProduct[] {
-    // this.filter.append(field, `${value}`);
     let tempData: IProduct[] = [];
     value.forEach((el) => {
       tempData = [...tempData, ...data.filter((item: IProduct) => item[field] === el)];
@@ -34,7 +30,6 @@ export default class Model {
   }
 
   public filterBySearch(data: IProduct[], value: string) {
-    // this.filter.set('search', `${value}`);
     value = value.toLocaleLowerCase().trim();
     return data.filter(
       (item: IProduct) =>
@@ -46,20 +41,15 @@ export default class Model {
   }
 
   public sortItems(dir: SortParm, arr: IProduct[]) {
-    // this.filter.set('sort', `${dir}`);
     switch (dir) {
       case SortParm.priceDown:
         return arr.sort((el1, el2) => el2.price - el1.price);
-        break;
       case SortParm.priceUp:
         return arr.sort((el1, el2) => el1.price - el2.price);
-        break;
       case SortParm.ratingDown:
         return arr.sort((el1, el2) => el2.rating - el1.rating);
-        break;
       case SortParm.ratingUp:
         return arr.sort((el1, el2) => el1.rating - el2.rating);
-        break;
       default:
         return arr;
     }
@@ -79,7 +69,6 @@ export default class Model {
 
   changeItemToCart(id: string, type: 'plus' | 'minus') {
     const item: IProduct | undefined = this.productsAll.find((el) => el.id === Number(id));
-    // console.log(this.shoppingCart, 'start');
     const indexInCart = this.shoppingCart.findIndex((el) => el.id === Number(id));
     const itemInCart = this.shoppingCart.find((el) => el.id === Number(id));
     if (item) {

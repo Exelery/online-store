@@ -1,5 +1,3 @@
-// import { IData } from '../utils/types';
-
 const pathApi = 'https://dummyjson.com/products?limit=40';
 
 export class ApiLoader {
@@ -8,12 +6,6 @@ export class ApiLoader {
   public async api<T>(): Promise<T> {
     const response = await fetch(this.path);
     const data: T = await response.json();
-    // return fetch(this.path).then((response) => {
-    //   if (!response.ok) {
-    //     throw new Error(response.statusText);
-    //   }
-    //   return response.json();
-    // });
     return data;
   }
 }

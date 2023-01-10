@@ -1,4 +1,3 @@
-// import { IProductCount } from '../../utils/types';
 import CartPage from '../../view/cartPage';
 import Model from '../model/model';
 import AppController from './controller';
@@ -29,7 +28,6 @@ export default class CartPageController {
               const id = item.getAttribute('data-id');
               const minus = e.target.closest('.item__dec');
               const plus = e.target.closest('.item__inc');
-              // const stock = item.querySelector('.item__stock span');
               if (id && (plus || minus)) {
                 if (plus) {
                   this.model.changeItemToCart(id, 'plus');
@@ -38,10 +36,6 @@ export default class CartPageController {
                   this.model.changeItemToCart(id, 'minus');
                 }
                 this.controller.appRouter(e, 'cart/?' + this.model.filter.toString());
-                // const cartItems: IProductCount[] = this.model.findItemsFromCart(
-                //   this.model.shoppingCart
-                // ) as IProductCount[];
-                // this.cartPage.cardPagination.draw(cartItems, undefined, undefined);
               }
             }
           }

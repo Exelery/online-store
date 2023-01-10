@@ -39,7 +39,7 @@ export default class AppController {
   }
 
   start() {
-    // this.updateCart();
+    this.router.listen();
     this.addUserEvents();
     this.tourchSliders = true;
   }
@@ -56,7 +56,6 @@ export default class AppController {
       await this.model.loadData();
     }
     const tempArr = path.split('/');
-    // const regex = 'product/\b([1-9]|[1-4][0-9]|50)\b';
     const foundItem = this.model.productsAll.find((el) => el.id === Number(tempArr[1]));
     const filters = this.updateFilters(this.model.filter);
     const data = this.filterAndSortItems(filters, this.model.productsAll);

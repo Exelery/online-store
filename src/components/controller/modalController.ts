@@ -14,7 +14,6 @@ export default class ModalController {
       if (confirmBtn && modalForm) {
         confirmBtn.addEventListener('click', (e) => {
           const errors = modalForm.querySelectorAll('.err');
-          console.log(errors, errors.length);
           if (errors.length === 0) {
             localStorage.clear();
             confirmBtn.textContent = 'Congratulations! You did it!!';
